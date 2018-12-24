@@ -1,2 +1,10 @@
 env
 .DS_Store
+*.pyc
+*.pyo
+*/static
+*/media
+*/site_config.json
+*wsgi.py
+*manage.py
+__pycache__/
