@@ -32,7 +32,6 @@ os.environ['DJANGO_SETTINGS_MODULE'] = configs['SETTINGS']
 INSTALLED_APPS = [
     'home',
     'search',
-    'blog',
     'showcase.apps.ShowcaseConfig',
     'users',
     'api',
