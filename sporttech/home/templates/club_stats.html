@@ -1,0 +1,1025 @@
+{% extends "base.html" %} 
+
+{% block title %}Club Example - SportTech IQ{% endblock title %}
+{% load static %}
+{% block headscript %}
+        <!-- Charts libraries -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.9/c3.min.js"></script>
+{% endblock headscript %}
+
+{% block content %}
+<!--HEADER/TITLE OF THE HOME PAGE-->
+     <!--CLUB TRADING CARD-->
+    <span id="card" class="anchor"></span>
+    <section class="container pt-7">
+      <div class="row align-items-center justify-content-center ">
+        <div class="col-12 col-lg-5 py-2 order-12 order-lg-1 text-center">
+          <img src="{% static "img/tc_club00001.png" %}" class="key-feature-image img-fluid info-full">
+          <p class="text-center pt-2">
+            <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fsporttechiq.com%2Fimg%2Fcards/tc_club00001.png&text=Look%20at%20my%20club%27s%20soccer%20trading%20card!&hashtags=soccer,SportTechIQ">
+              <span class="fa fa-twitter  blue-icon"></span>
+            </a>
+            <a href="https://www.facebook.com/sharer.php?u=http%3A%2F%2Fsporttechiq.com%2Fimg%2Fcards/tc_club00001.png">
+              <span class="fa fa-facebook-official blue-icon"></span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!--CHARTS-->
+    <span id="comparison" class="anchor"></span>
+    <section class="container pt-2">
+      <h2 class="display-4 py-3">Comparisons</h2>
+      <div class="row align-items-center justify-content-center">
+        <div class="col-12 col-lg-5 text-center chart-container">
+          <div id="chart-1" class="iq-chart info-full"></div>
+          Club, Team, or Player:
+          <span class="dropdown">
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="club-scope-dropdown" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Club
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="club-scope-dropdown">
+              <a class="dropdown-item" href="#" data-value="club">Club</a>
+              <a class="dropdown-item" href="#" data-value="team">Team</a>
+              <a class="dropdown-item" href="#" data-value="player">Player</a>
+            </div>
+          </span>
+
+          <span class="dropdown">
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="team-dropdown" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Team A
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="team-dropdown">
+              <a class="dropdown-item" href="#" data-value="A">Team A</a>
+              <a class="dropdown-item" href="#" data-value="B">Team B</a>
+            </div>
+          </span>
+
+          <span class="dropdown">
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="player-dropdown" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Player A
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="player-dropdown">
+              <a class="dropdown-item" href="#" data-value="A">Player A</a>
+              <a class="dropdown-item" href="#" data-value="B">Player B</a>
+            </div>
+          </span>
+
+          <br>Date:
+          <span class="dropdown">
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="date-dropdown" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Latest
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="date-dropdown">
+              <a class="dropdown-item" href="#">Latest</a>
+              <!-- <a class="dropdown-item disabled" href="#" data-value="1/13/18">1/13/18</a>
+              <a class="dropdown-item disabled" href="#" data-value="7/15/17">7/15/17</a>
+              <a class="dropdown-item disabled" href="#" data-value="2/20/17">2/20/17</a> -->
+            </div>
+          </span>
+
+
+        </div>
+        <div class="col-12 col-lg-5 py-2 text-center  chart-container">
+          <div id="chart-2" class="iq-chart info-full"></div>
+          Club, Team or Player:
+          <span class="dropdown">
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="club-scope-dropdown-2" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Club
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="club-scope-dropdown-2">
+              <a class="dropdown-item" href="#" data-value="club">Club</a>
+              <a class="dropdown-item" href="#" data-value="team">Team</a>
+              <a class="dropdown-item" href="#" data-value="player">Player</a>
+            </div>
+          </span>
+
+          <span class="dropdown">
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="team-dropdown-2" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Team A
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="team-dropdown-2">
+              <a class="dropdown-item" href="#" data-value="A">Team A</a>
+              <a class="dropdown-item" href="#" data-value="B">Team B</a>
+            </div>
+          </span>
+
+          <span class="dropdown">
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="player-dropdown-2" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Player A
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="player-dropdown-2">
+              <a class="dropdown-item" href="#" data-value="A">Player A</a>
+              <a class="dropdown-item" href="#" data-value="B">Player B</a>
+            </div>
+          </span>
+
+          <br> Comparison:
+          <span class="dropdown">
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="competitor-age-dropdown"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Any birth year
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="competitor-age-dropdown">
+              <a class="dropdown-item" href="#" data-value="all">Any birth year</a>
+              <a class="dropdown-item disabled" href="#" data-value="2012">Birth year 2012</a>
+              <a class="dropdown-item disabled" href="#" data-value="2011">Birth year 2011</a>
+            </div>
+          </span>
+          <span class="dropdown">
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="competitor-gender-dropdown"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Male
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="competitor-gender-dropdown">
+              <a class="dropdown-item" href="#" data-value="M">Male</a>
+              <a class="dropdown-item disabled" href="#" data-value="F">Female</a>
+              <a class="dropdown-item disabled" href="#" data-value="all">All genders</a>
+            </div>
+          </span>
+          <br> Dates:
+          <span class="dropdown">
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="competitor-club-compare-dropdown"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Select All
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="competitor-club-compare-dropdown">
+              <a class="dropdown-item active" href="#" data-value="all">Select All</a>
+              <!--               <a class="dropdown-item disabled" href="#" data-value="1/13/18">1/13/18</a>
+              <a class="dropdown-item disabled" href="#" data-value="7/15/17">7/15/17</a>
+              <a class="dropdown-item disabled" href="#" data-value="2/20/17">2/20/17</a> -->
+            </div>
+          </span>
+        </div>
+      </div>
+    </section>
+
+
+    <!--LATEST STATS-->
+    <span id="stats" class="anchor"></span>
+    <section class="container pt-2 mt-5">
+      <h2 class="display-4">Averages</h2>
+      <div class="text-center pt-2 pb-3 filter-container">
+
+
+        Club, Team or Player:
+        <span class="dropdown">
+          <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="club-scope-dropdown-3" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Club
+            <span class="caret"></span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="club-scope-dropdown-3">
+            <a class="dropdown-item" href="#" data-value="club">Club</a>
+            <a class="dropdown-item" href="#" data-value="team">Team</a>
+            <a class="dropdown-item" href="#" data-value="player">Player</a>
+          </div>
+        </span>
+
+        <span class="dropdown">
+          <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="team-dropdown-3" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Team A
+            <span class="caret"></span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="team-dropdown-3">
+            <a class="dropdown-item" href="#" data-value="A">Team A</a>
+            <a class="dropdown-item" href="#" data-value="B">Team B</a>
+          </div>
+        </span>
+
+        <span class="dropdown">
+          <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="player-dropdown-3" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Player A
+            <span class="caret"></span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="player-dropdown-3">
+            <a class="dropdown-item" href="#" data-value="A">Player A</a>
+            <a class="dropdown-item" href="#" data-value="B">Player B</a>
+          </div>
+        </span>
+
+
+        <br> Dates:
+        <span class="dropdown">
+          <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="club-date-dropdown" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">Select All
+            <span class="caret"></span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="club-date-dropdown">
+            <a class="dropdown-item active" href="#" data-value="all">Select All</a>
+            <a class="dropdown-item disabled" href="#" data-value="1/13/18">1/13/18</a>
+            <a class="dropdown-item disabled" href="#" data-value="7/15/17">7/15/17</a>
+            <a class="dropdown-item disabled" href="#" data-value="2/20/17">2/20/17</a>
+          </div>
+        </span>
+
+
+
+
+
+      </div>
+      <div class="row align-items-center justify-content-center">
+        <div class="col-12 col-md-11 col-lg-8">
+
+
+          <h2>Shooting</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">
+                  0-100 (100 highest)
+                </th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">PK</th>
+                <td>
+                  48
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">On run Right foot</th>
+                <td>
+                  51
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">On run Left foot</th>
+                <td>
+                  27
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Finish Right foot</th>
+                <td>
+                  0
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Finish Left foot</th>
+                <td>
+                  0
+                </td>
+              </tr>
+              <tr class="total">
+                <th scope="row" colspan="2">Shooting IQ: 22</th>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <h2>Passing</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+              <th scope="col"> </th>
+              <th scope="col">
+                0-100 (100 highest)
+              </th>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Long Right Foot</th>
+                <td>
+                  21
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Long Left Foot</th>
+                <td>
+                  17
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Cross Right Foot</th>
+                <td>
+                  13
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Cross Left Foot</th>
+                <td>
+                  5
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Side Pass Right foot</th>
+                <td>
+                  24
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Side Pass Left foot</th>
+                <td>
+                  10
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Weighted Pass Right foot</th>
+                <td>
+                  6
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Weighted Pass Left foot</th>
+                <td>
+                  2
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Throw-in inside box</th>
+                <td>
+                  26
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Throw-in between far cones</th>
+                <td>
+                  29
+                </td>
+              </tr>
+
+              <tr class="total">
+                <th scope="row" colspan="2">Passing IQ: 13</th>
+              </tr>
+            </tbody>
+          </table>
+
+
+
+          <h2>Dribbling</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">
+                  0-100 (100 highest)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Speed Dribble Both Feet</th>
+                <td>
+                  27
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Dribble Right foot</th>
+                <td>
+                  15
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Dribble Left foot</th>
+                <td>
+                  2
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Dribble 3-Cone</th>
+                <td>
+                  0
+                </td>
+              </tr>
+              <tr class="total">
+                <th scope="row" colspan="2">Dribbling IQ: 11</th>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <h2>Control</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">
+                  0-100 (100 highest)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Thigh</th>
+                <td>
+                  4
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Foot</th>
+                <td>
+                  4
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Taps</th>
+                <td>
+                  33
+                </td>
+              </tr>
+              <tr class="total">
+                <th scope="row" colspan="2">Control IQ: 14</th>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <div class="display-4 text-primary">
+            Skill IQ: 15
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--PLAYERS LIST-->
+    <span id="stats" class="anchor"></span>
+    <section class="container px-0 pt-2 mt-5">
+      <h2 class="display-4  py-3">Club players</h2>
+      <div class="row align-items-center justify-content-center">
+        <div class="col-12">
+          <table class="table table-responsive table-sm players-table table-hover sortable">
+            <thead>
+              <tr>
+                <th scope="col" class="arrow" data-defaultsign="nospan" data-defaultsort="asc">Player</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Birth Year</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Gender</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Team</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">State</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">USA Region</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Country</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Height (Inches)</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Shooting IQ</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Passing IQ</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Dribbling IQ</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Control IQ</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Skill IQ</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Player</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Yair</td>
+                <td>N/A</td>
+                <td>B</td>
+                <td>N/A</td>
+                <td>FL</td>
+                <td>SE</td>
+                <td>USA</td>
+                <td>N/A</td>
+                <td>32</td>
+                <td>29</td>
+                <td>25</td>
+                <td>17</td>
+                <td>26</td>
+                <td>Yair</td>
+              </tr>
+              <tr>
+                <td>Riley</td>
+                <td>N/A</td>
+                <td>B</td>
+                <td>N/A</td>
+                <td>FL</td>
+                <td>SE</td>
+                <td>USA</td>
+                <td>N/A</td>
+                <td>0</td>
+                <td>37</td>
+                <td>19</td>
+                <td>17</td>
+                <td>18</td>
+                <td>Riley</td>
+              </tr>
+              <tr>
+                <td>Alex</td>
+                <td>N/A</td>
+                <td>B</td>
+                <td>N/A</td>
+                <td>FL</td>
+                <td>SE</td>
+                <td>USA</td>
+                <td>N/A</td>
+                <td>0</td>
+                <td>24</td>
+                <td>19</td>
+                <td>0</td>
+                <td>11</td>
+                <td>Alex</td>
+              </tr>
+              <tr>
+                <td>Anthony</td>
+                <td>N/A</td>
+                <td>B</td>
+                <td>N/A</td>
+                <td>FL</td>
+                <td>SE</td>
+                <td>USA</td>
+                <td>N/A</td>
+                <td>0</td>
+                <td>11</td>
+                <td>31</td>
+                <td>0</td>
+                <td>11</td>
+                <td>Anthony</td>
+              </tr>
+              <tr>
+                <td>Branson</td>
+                <td>N/A</td>
+                <td>B</td>
+                <td>N/A</td>
+                <td>FL</td>
+                <td>SE</td>
+                <td>USA</td>
+                <td>N/A</td>
+                <td>33</td>
+                <td>0</td>
+                <td>0</td>
+                <td>33</td>
+                <td>16</td>
+                <td>Branson</td>
+              </tr>
+              <tr>
+                <td>Michael</td>
+                <td>N/A</td>
+                <td>B</td>
+                <td>N/A</td>
+                <td>FL</td>
+                <td>SE</td>
+                <td>USA</td>
+                <td>N/A</td>
+                <td>30</td>
+                <td>0</td>
+                <td>0</td>
+                <td>25</td>
+                <td>14</td>
+                <td>Michael</td>
+              </tr>
+              <tr>
+                <td>Gunner</td>
+                <td>N/A</td>
+                <td>B</td>
+                <td>N/A</td>
+                <td>FL</td>
+                <td>SE</td>
+                <td>USA</td>
+                <td>N/A</td>
+                <td>44</td>
+                <td>0</td>
+                <td>0</td>
+                <td>17</td>
+                <td>15</td>
+                <td>Gunner</td>
+              </tr>
+              <tr>
+                <td>Ara</td>
+                <td>N/A</td>
+                <td>B</td>
+                <td>N/A</td>
+                <td>FL</td>
+                <td>SE</td>
+                <td>USA</td>
+                <td>N/A</td>
+                <td>39</td>
+                <td>0</td>
+                <td>0</td>
+                <td>25</td>
+                <td>16</td>
+                <td>Ara</td>
+              </tr>
+              <tr>
+                <td>Josh</td>
+                <td>N/A</td>
+                <td>B</td>
+                <td>N/A</td>
+                <td>FL</td>
+                <td>SE</td>
+                <td>USA</td>
+                <td>N/A</td>
+                <td>45</td>
+                <td>0</td>
+                <td>0</td>
+                <td>17</td>
+                <td>15</td>
+                <td>Josh</td>
+              </tr>
+              <tr>
+                <td>KJ</td>
+                <td>N/A</td>
+                <td>B</td>
+                <td>N/A</td>
+                <td>FL</td>
+                <td>SE</td>
+                <td>USA</td>
+                <td>N/A</td>
+                <td>45</td>
+                <td>0</td>
+                <td>0</td>
+                <td>17</td>
+                <td>15</td>
+                <td>KJ</td>
+              </tr>
+              <tr>
+                <td>Nick</td>
+                <td>N/A</td>
+                <td>B</td>
+                <td>N/A</td>
+                <td>FL</td>
+                <td>SE</td>
+                <td>USA</td>
+                <td>N/A</td>
+                <td>0</td>
+                <td>45</td>
+                <td>19</td>
+                <td>0</td>
+                <td>16</td>
+                <td>Nick</td>
+              </tr>
+              <tr>
+                <td>Jason</td>
+                <td>N/A</td>
+                <td>B</td>
+                <td>N/A</td>
+                <td>FL</td>
+                <td>SE</td>
+                <td>USA</td>
+                <td>N/A</td>
+                <td>0</td>
+                <td>16</td>
+                <td>19</td>
+                <td>0</td>
+                <td>9</td>
+                <td>Jason</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+
+    <!--INDIVIDUAL PLAYERS INFO-->
+    <span id="players" class="anchor"></span>
+    <section class="container pt-2 mt-3">
+      <div class="row align-items-center justify-content-center">
+        <h2 class="display-4  py-3">Players' Scorecards</h2>
+
+
+        <div class="row col-12 col-lg-11 justify-content-center">
+
+          <div class="card player-thumb  mx-3  my-4">
+            <img class="card-img-top" src="{% static "img/default_profile.png" %}" alt="Yair">
+            <div class="card-body">
+              <h5 class="card-title text-center">Yair</h5>
+              <p class="card-text">
+                Number: N/A
+                <br> Birth Year: N/A
+                <br> Height: N/A
+
+              </p>
+              <a href="/player-stats" class="btn btn-primary btn-sm">Open scorecard</a>
+            </div>
+          </div>
+
+
+
+          <div class="card player-thumb  mx-3  my-4">
+            <img class="card-img-top" src="{% static "img/default_profile.png" %}" alt="Riley">
+            <div class="card-body">
+              <h5 class="card-title text-center">Riley</h5>
+              <p class="card-text">
+                Number: N/A
+                <br> Birth Year: N/A
+                <br> Height: N/A
+
+              </p>
+              <a href="/player-stats" class="btn btn-primary btn-sm">Open scorecard</a>
+            </div>
+          </div>
+
+
+          <div class="card player-thumb  mx-3  my-4">
+            <img class="card-img-top" src="{% static "img/default_profile.png" %}" alt="Alex">
+            <div class="card-body">
+              <h5 class="card-title text-center">Alex</h5>
+              <p class="card-text">
+                Number: N/A
+                <br> Birth Year: N/A
+                <br> Height: N/A
+
+              </p>
+              <a href="/player-stats" class="btn btn-primary btn-sm">Open scorecard</a>
+            </div>
+          </div>
+
+
+          <div class="card player-thumb  mx-3  my-4">
+            <img class="card-img-top" src="{% static "img/default_profile.png" %}" alt="Anthony">
+            <div class="card-body">
+              <h5 class="card-title text-center">Anthony</h5>
+              <p class="card-text">
+                Number: N/A
+                <br> Birth Year: N/A
+                <br> Height: N/A
+
+              </p>
+              <a href="/player-stats" class="btn btn-primary btn-sm">Open scorecard</a>
+            </div>
+          </div>
+
+
+          <div class="card player-thumb  mx-3  my-4">
+            <img class="card-img-top" src="{% static "img/default_profile.png" %}" alt="Branson">
+            <div class="card-body">
+              <h5 class="card-title text-center">Branson</h5>
+              <p class="card-text">
+                Number: N/A
+                <br> Birth Year: N/A
+                <br> Height: N/A
+
+              </p>
+              <a href="/player-stats" class="btn btn-primary btn-sm">Open scorecard</a>
+            </div>
+          </div>
+
+
+          <div class="card player-thumb  mx-3  my-4">
+            <img class="card-img-top" src="{% static "img/default_profile.png" %}" alt="Michael">
+            <div class="card-body">
+              <h5 class="card-title text-center">Michael</h5>
+              <p class="card-text">
+                Number: N/A
+                <br> Birth Year: N/A
+                <br> Height: N/A
+
+              </p>
+              <a href="/player-stats" class="btn btn-primary btn-sm">Open scorecard</a>
+            </div>
+          </div>
+
+
+          <div class="card player-thumb  mx-3  my-4">
+            <img class="card-img-top" src="{% static "img/default_profile.png" %}" alt="Gunner">
+            <div class="card-body">
+              <h5 class="card-title text-center">Gunner</h5>
+              <p class="card-text">
+                Number: N/A
+                <br> Birth Year: N/A
+                <br> Height: N/A
+
+              </p>
+              <a href="/player-stats" class="btn btn-primary btn-sm">Open scorecard</a>
+            </div>
+          </div>
+
+
+          <div class="card player-thumb  mx-3  my-4">
+            <img class="card-img-top" src="{% static "img/default_profile.png" %}" alt="Ara">
+            <div class="card-body">
+              <h5 class="card-title text-center">Ara</h5>
+              <p class="card-text">
+                Number: N/A
+                <br> Birth Year: N/A
+                <br> Height: N/A
+
+              </p>
+              <a href="/player-stats" class="btn btn-primary btn-sm">Open scorecard</a>
+            </div>
+          </div>
+
+
+          <div class="card player-thumb  mx-3  my-4">
+            <img class="card-img-top" src="{% static "img/default_profile.png" %}" alt="Josh">
+            <div class="card-body">
+              <h5 class="card-title text-center">Josh</h5>
+              <p class="card-text">
+                Number: N/A
+                <br> Birth Year: N/A
+                <br> Height: N/A
+
+              </p>
+              <a href="/player-stats" class="btn btn-primary btn-sm">Open scorecard</a>
+            </div>
+          </div>
+
+
+          <div class="card player-thumb  mx-3  my-4">
+            <img class="card-img-top" src="{% static "img/default_profile.png" %}" alt="KJ">
+            <div class="card-body">
+              <h5 class="card-title text-center">KJ</h5>
+              <p class="card-text">
+                Number: N/A
+                <br> Birth Year: N/A
+                <br> Height: N/A
+
+              </p>
+              <a href="/player-stats" class="btn btn-primary btn-sm">Open scorecard</a>
+            </div>
+          </div>
+
+
+          <div class="card player-thumb  mx-3  my-4">
+            <img class="card-img-top" src="{% static "img/default_profile.png" %}" alt="Nick">
+            <div class="card-body">
+              <h5 class="card-title text-center">Nick</h5>
+              <p class="card-text">
+                Number: N/A
+                <br> Birth Year: N/A
+                <br> Height: N/A
+
+              </p>
+              <a href="/player-stats" class="btn btn-primary btn-sm">Open scorecard</a>
+            </div>
+          </div>
+
+
+          <div class="card player-thumb  mx-3  my-4">
+            <img class="card-img-top" src="{% static "img/default_profile.png" %}" alt="Jason">
+            <div class="card-body">
+              <h5 class="card-title text-center">Jason</h5>
+              <p class="card-text">
+                Number: N/A
+                <br> Birth Year: N/A
+                <br> Height: N/A
+
+              </p>
+              <a href="/player-stats" class="btn btn-primary btn-sm">Open scorecard</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+{% endblock content %}
+
+{% block custom_scripts %}
+  <script src="{% static "js/bootstrap-sortable.js" %}"></script>
+  <script src="{% static "js/jquery.floatThead.min.js" %}"></script>
+
+  <script>
+      $(function () {
+        $("#team-dropdown").parents("span.dropdown").hide();
+        $("#player-dropdown").parents("span.dropdown").hide();
+        $("#team-dropdown-2").parents("span.dropdown").hide();
+        $("#player-dropdown-2").parents("span.dropdown").hide();
+        $("#team-dropdown-3").parents("span.dropdown").hide();
+        $("#player-dropdown-3").parents("span.dropdown").hide();
+
+        $("#club-scope-dropdown").on("change", this, function (event) {
+          if ($(this).val() == "club") {
+            $("#team-dropdown").parents("span.dropdown").hide();
+            $("#player-dropdown").parents("span.dropdown").hide();
+          } else if ($(this).val() == "team") {
+            $("#team-dropdown").parents("span.dropdown").show();
+            $("#player-dropdown").parents("span.dropdown").hide();
+          } else if ($(this).val() == "player") {
+            $("#team-dropdown").parents("span.dropdown").hide();
+            $("#player-dropdown").parents("span.dropdown").show();
+          }
+        });
+
+        $("#club-scope-dropdown-2").on("change", this, function (event) {
+          if ($(this).val() == "club") {
+            $("#team-dropdown-2").parents("span.dropdown").hide();
+            $("#player-dropdown-2").parents("span.dropdown").hide();
+          } else if ($(this).val() == "team") {
+            $("#team-dropdown-2").parents("span.dropdown").show();
+            $("#player-dropdown-2").parents("span.dropdown").hide();
+          } else if ($(this).val() == "player") {
+            $("#team-dropdown-2").parents("span.dropdown").hide();
+            $("#player-dropdown-2").parents("span.dropdown").show();
+          }
+
+        })
+
+        $("#club-scope-dropdown-3").on("change", this, function (event) {
+          if ($(this).val() == "club") {
+            $("#team-dropdown-3").parents("span.dropdown").hide();
+            $("#player-dropdown-3").parents("span.dropdown").hide();
+          } else if ($(this).val() == "team") {
+            $("#team-dropdown-3").parents("span.dropdown").show();
+            $("#player-dropdown-3").parents("span.dropdown").hide();
+          } else if ($(this).val() == "player") {
+            $("#team-dropdown-3").parents("span.dropdown").hide();
+            $("#player-dropdown-3").parents("span.dropdown").show();
+          }
+
+        })
+
+
+      });
+    </script>
+
+    <script>
+        /*MAKE TH FIXED IF PLUGIN LOADED*/
+
+        $(function () {
+            if (jQuery().floatThead) {
+                $('table.stats-table').floatThead({
+                    position: 'fixed',
+                    top: $('#top-menu').height()
+                });
+            }
+        });
+    </script>
+
+    <!--CHARTS-->
+    <script>
+    var barChart = function (id, data1, data2) {
+      c3.generate({
+        data: {
+          columns: [
+            data1,
+            data2
+          ],
+          type: "bar",
+          groups: [
+            ["data1", "data2"]
+          ],
+          labels: true,
+          selection: {
+            enabled: false
+          }
+        },
+        bar: {
+          width: {
+            ratio: 0.7
+          }
+        },
+        interaction: {
+          enabled: false
+        },
+        legend: {
+          item: {
+            onclick: function () { },
+            onmouseover: function () { }
+          }
+        },
+        grid: {
+          y: {
+            lines: [{ value: 0 }],
+
+          },
+          focus: {
+            show: false
+          }
+        },
+        bindto: id,
+        color: {
+          pattern: ["rgb(68, 170, 67)", "rgb(53, 80, 139)"]
+        },
+        axis: {
+          x: {
+            type: "category",
+            categories: ["Shooting IQ", "Passing IQ", "Dribbling IQ", "Control IQ", "Skill IQ"]
+          },
+          y: {
+            min: 0,
+            max: 100,
+            padding: { top: 0, bottom: 0 }
+          },
+          rotated: true
+        },
+        transition: {
+          duration: 500
+        }
+      });
+    };
+
+    var chartData1 = ["Latest Showcase", 48, 47, 85, 83, 66];
+    var chartData2 = ["Prior Showcase", 50, 56, 72, 80, 65];
+    barChart("#chart-1", chartData1, chartData2);
+
+    var chartData1 = ["Soccer Club", 48, 47, 85, 83, 66];
+    var chartData2 = ["Other clubs (average)", 65, 68, 45, 65, 65];
+    barChart("#chart-2", chartData1, chartData2);
+
+    </script>
+
+{% endblock custom_scripts %}

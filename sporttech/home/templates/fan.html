@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Fan - SportTech IQ</title>
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+  <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,600&amp;subset=latin-ext" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  {% load static %} 
+  <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+  <link rel="stylesheet" href="{% static "css/styles.css" %}">
+
+  <script src="/js/jquery.min.js"></script>
+</head>
+
+<body id="top" class="sign-page">
+  <div>
+    <div>
+      <a href="/" title="SportTechIQ">
+        <span class="navbar-brand ml-3 ml-lg-5 mb-3 mb-md-0">SportTech IQ &#8482;</span>
+      </a>
+    </div>
+
+    <div class="row align-items-center justify-content-center">
+
+      <div class="mt-5 col-lg-8 col-md-9  col-sm-12 announcement-text">
+        <p class="landing-text-large">Our vision is you will enjoy watching sports more, as we help improve player skills. And you will get to enjoy our Stats in media (Televised games, eSports, Fantasy teams, Exchanging Trading <span class="text-nowrap">Cards, etc.)</span></p>
+      </div>
+
+    </div>
+
+
+    <div class="container announcement-features my-5 col-lg-6">
+        <div class="row">
+          <div class="col text-center">
+            <a href="{% url 'signup' %}" class="announcement-button btn btn-primary btn-lg align-middle mt-5 mb-3">SIGN UP</a>
+          </div>
+        </div>
+      </div>
+
+
+    <div class="copyright col-12 py-4 text-center">© 2018 Sport Tech IQ. All Rights Reserved.</div>
+  </div>
+
+  <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+
+  <!--ENABLE TOOLTIPS-->
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    })
+
+
+    $("#login-form").addEventListener('submit', function (event) {
+      if ($("#login-form").checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      $("#login-form").classList.add('was-validated');
+    }, false);
+
+  </script>
+
+</body>
+
+</html>

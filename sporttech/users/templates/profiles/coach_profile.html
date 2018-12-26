@@ -1,0 +1,665 @@
+{% extends "base.html" %} 
+
+
+{% block title %}{{ team.name }} - SportTech IQ{% endblock title %}
+
+{% load static %}
+{% block headscript %}
+        <!-- Charts libraries -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.9/c3.min.js"></script>
+{% endblock headscript %}
+
+{% block content %}
+
+    <!--HEADER/TITLE OF THE HOME PAGE-->
+    <header class="container-fluid" id="club-header">
+      <div class="row mt-5 align-items-center justify-content-center ">
+        <div class="col-lg-3 col-7 mt-5 mt-lg-0 px-0 px-lg-1 pt-5 pb-3 text-center">
+          {% if club.photo %}
+          <img src="{{ club.photo.url }}" alt="{{ team }}" class="club-logo img-fluid">
+          {% else %}
+          <img src="{% static "img/logo_large.png" %}" id="header-logo" alt="SportTech IQ Logo" class="img-fluid">
+          {% endif %}
+        </div>
+        <div class="col-lg-4 col-sm-12 text-center text-lg-left">
+          <div class="py-sm-4 pt-lg-6">
+            <h1>{{ team.name }}</h1>
+            <table class="table mt-2">
+              <tr>
+                <td>City</td>
+                <td>{{ team.city }}</td>
+              </tr>
+              <tr>
+                <td>Players</td>
+                <td>{{ count }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    {% comment %}
+    team's don't have trading cards yet
+
+    <!--CLUB TRADING CARD-->
+    <span id="card" class="anchor"></span>
+    <section class="container pt-4">
+      <div class="row align-items-center justify-content-center ">
+        <div class="col-12 col-lg-5 py-2 order-12 order-lg-1 text-center">
+          <img src="{% static "img/tc_club00000.png" %}" class="key-feature-image img-fluid">
+          <p class="text-center pt-2">
+            <a href="mailto:?subject=Look at my club's soccer trading card!&amp;body=Hi, Here is a trading card of my club! http://sporttechiq.com/img/cards/tc_club00001.png Check out this site http://sporttechiq.com.">
+              <span class="fa  fa-envelope-square blue-icon"></span>
+            </a>
+            <a href="https://www.facebook.com/sharer.php?u=http%3A%2F%2Fsporttechiq.com%2Fimg%2Fcards/tc_club00001.png">
+              <span class="fa fa-facebook-official blue-icon"></span>
+            </a>
+            <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fsporttechiq.com%2Fimg%2Fcards/tc_club00001.png&text=Look%20at%20my%20club%27s%20soccer%20trading%20card!&hashtags=soccer,SportTechIQ">
+              <span class="fa fa-twitter  blue-icon"></span>
+            </a>
+            <a href="https://plus.google.com/share?url=http%3A%2F%2Fsporttechiq.com%2Fimg%2Fcards/tc_club00001.png">
+              <span class="fa fa-google-plus  blue-icon"></span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
+      
+    {% endcomment %}
+
+
+    <!--CHARTS-->
+    <span id="comparison" class="anchor"></span>
+    <section class="container pt-2">
+      <h2 class="display-4 py-3">Comparisons</h2>
+      <div class="row align-items-center justify-content-center">
+        <div class="col-12 col-lg-5 text-center chart-container">
+          <div id="chart-1" class="iq-chart"></div>
+          Compare
+            <span class="dropdown">
+              <select id="selection_1" onchange="loadChart(1)">{% for player in players %}
+                <option value="{{ player }}">{{ player }}</option>{% endfor %}
+                </select>
+            </span>
+          <br />with
+            <span class="dropdown">
+              <select id="selection_2" onchange="loadChart(1)">{% for showcase in showcase_info %}
+                <option value="{{ showcase.showcase_name__showcase_name }}">{{ showcase.showcase_name__showcase_name }}</option>
+              {% endfor %}
+                </select>
+            </span>
+        </div>
+
+        <div class="col-12 col-lg-5 py-2 text-center  chart-container">
+          <div id="chart-2" class="iq-chart"></div>
+          Compare
+            <span class="dropdown">
+              <select id="selection_3" onchange="loadChart(2)">{% for player in players %}
+                  <option value="{{ player }}">{{ player }}</option>{% endfor %}
+                </select>
+            </span>
+          <br />with
+            <span class="dropdown">
+              <select id="selection_4" onchange="loadChart(2)">
+                  <option value="Team">Team</option>
+                  <option value="Club">Club</option>{% for player in players %}
+                  <option value="{{ player }}">{{ player }}</option>{% endfor %}
+                </select>
+            </span>
+        </div>
+      </div>
+    </section>
+
+
+    <!--LATEST STATS-->
+    <span id="stats" class="anchor"></span>
+    <section class="container pt-2 mt-5">
+      <h2 class="display-4">Averages</h2>
+      <div class="text-center pt-2 pb-3 filter-container">
+
+          Select Averages for
+          <span class="dropdown">
+            <select name="averages-table" id="averages-table" onchange="loadTable()">
+              <option value="team">Team</option>
+              <option value="club">Club</option>
+            </select>
+          </div>
+          </span>
+      </div>
+      <div class="row align-items-center justify-content-center">
+        <div class="col-12 col-md-11 col-lg-8">
+          <h2>Shooting</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">
+                  0-100 (100 highest)
+                </th>
+              </tr>
+            </thead>
+            <tbody class="data-table">
+              <tr id="pk">
+                <th scope="row">PK
+                </th>
+                <td></td>
+              </tr>
+              <tr id="on_run_right">
+                <th scope="row">On Run Right Foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="on_run_left">
+                <th scope="row">On Run Left Foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="finish_r">
+                <th scope="row">Finish Right Foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="finish_l">
+                <th scope="row">Finish Left Foot
+                </th>
+                <td></td>
+              </tr>
+              <tr class="total" id="total_shooting">
+                <th scope="row" colspan="2">Shooting IQ: <span class="total_value"></span></th>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <h2>Passing</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+              <th scope="col"> </th>
+              <th scope="col">
+                0-100 (100 highest)
+              </th>
+            </thead>
+
+            <tbody class="data-table">
+              <tr id="long_r">
+                <th scope="row">Long Right Foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="long_l">
+                <th scope="row">Long Left Foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="cross_r">
+                <th scope="row">Cross Right Foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="cross_l">
+                <th scope="row">Cross Left Foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="side_r">
+                <th scope="row">Side Pass Right Foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="side_l">
+                <th scope="row">Side Pass Left Foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="weigh_r">
+                <th scope="row">Weighted Pass Right foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="weigh_l">
+                <th scope="row">Weighted Pass Left Foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="throw_inside">
+                <th scope="row">Throw-in Inside Box
+                </th>
+                <td></td>
+              </tr>
+              <tr id="throw_between">
+                <th scope="row">Throw-in Between Far Cones
+                </th>
+                <td></td>
+              </tr>
+              <tr class="total" id="total_passing">
+                <th scope="row" colspan="2">Passing IQ: <span class="total_value"></span></th>
+              </tr>
+            </tbody>
+          </table>
+
+
+
+
+
+
+
+
+
+          <h2>Dribbling</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">
+                  0-100 (100 highest)
+                </th>
+              </tr>
+            </thead>
+
+            <tbody class="data-table">
+              <tr id="speed_dribble">
+                <th scope="row">Speed Dribble Both Feet
+                </th>
+                <td></td>
+              </tr>
+              <tr id="dribble_r">
+                <th scope="row">Dribble Right Foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="dribble_l">
+                <th scope="row">Dribble Left foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="dribble_3_cone">
+                <th scope="row">Dribble 3-Cone
+                </th>
+                <td></td>
+              </tr>
+              <tr class="total" id="total_dribbling">
+                <th scope="row" colspan="2">Dribbling IQ: <span class="total_value"></span></th>
+              </tr>
+            </tbody>
+          </table>
+
+
+
+
+
+
+
+
+
+
+
+
+          <h2>Control</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">
+                  0-100 (100 highest)
+                </th>
+              </tr>
+            </thead>
+
+            <tbody class="data-table">
+              <tr id="thigh">
+                <th scope="row">Thigh
+                </th>
+                <td></td>
+              </tr>
+              <tr id="foot">
+                <th scope="row">Foot
+                </th>
+                <td></td>
+              </tr>
+              <tr id="taps">
+                <th scope="row">Taps
+                </th>
+                <td></td>
+              </tr>
+              <tr class="total" id="total_control">
+                <th scope="row" colspan="2">Control IQ: <span class="total_value"></span></th>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </section>
+
+    <!--PLAYERS LIST-->
+    <span id="stats" class="anchor"></span>
+    <section class="container px-0 pt-2 mt-5">
+      <h2 class="display-4 py-3">Club players</h2>
+      <div class="row align-items-center justify-content-center">
+        <div class="col-12">
+          <table class="table table-responsive table-sm players-table table-hover sortable">
+            <thead>
+              <tr>
+                <th scope="col" class="arrow" data-defaultsign="nospan" data-defaultsort="asc">Player</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Birthyear</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Gender</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Team</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">State</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">USA Region</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Country</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Height (Inches)</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Shooting IQ</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Passing IQ</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Dribbling IQ</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Control IQ</th>
+                <th scope="col" class="arrow" data-defaultsign="nospan">Skill IQ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for player in players %}
+               <tr>
+                <td>{{ player }}</td>
+                <td>{{ player.player.birth_year }}</td>
+                <td>{{ player.player.gender }}</td>
+                <td>{{ player.player.team }}</td>
+                <td>{{ player.player.state }}</td>
+                <td>{{ player.player.region }}</td>
+                <td>{{ player.player.country }}</td>
+                <td>{{ player.height }}</td>
+                <td>{{ player.total_shooting|floatformat:'0' }}</td>
+                <td>{{ player.total_passing|floatformat:'0' }}</td>
+                <td>{{ player.total_dribbling|floatformat:'0' }}</td>
+                <td>{{ player.total_control|floatformat:'0' }}</td>
+                <td>{{ player.grand_total|floatformat:'0' }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+
+    <!--INDIVIDUAL PLAYERS INFO-->
+    <span id="players" class="anchor"></span>
+    <section class="container pt-2 mt-3">
+      <div class="row align-items-center justify-content-center">
+        <h2 class="display-4  py-3">Player Scorecards</h2>
+
+        <div class="row col-12 col-lg-11 justify-content-center">
+        {% for player in players %}
+          <div class="card player-thumb  mx-3  my-4">
+            {% if player.player.photo %}
+            <img class="card-img-top" src="{{ player.player.photo.url }}" alt="{{ player }}">
+            {% else %}
+            <img class="card-img-top" src="{% static "img/default_profile.png" %}" alt="No Player Photo">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title text-center">{{ player }}</h5>
+                <p class="card-text">
+                  Number: {{ player.player_number }}
+                  <br> Birthyear: {{ player.player.birth_year }}
+                  <br> Height (inches): {{ player.height }}
+                </p>
+                <a href="{% url 'player_detail' player.player.id player.player.slug %}" class="btn btn-primary btn-sm">
+                  Open scorecard
+                </a>
+            </div>
+          </div>
+        {% endfor %}
+
+        </div>
+      </div>
+    </section>
+{% endblock content %}
+{% block custom_scripts %}
+
+  <!--CHARTS-->
+  <script>
+    var playerData = {{% for player in players %}
+      "{{ player }}":[
+      "{{ player }}", 
+      {{ player.total_shooting|floatformat:'0' }},
+      {{ player.total_passing|floatformat:'0' }},
+      {{ player.total_dribbling|floatformat:'0' }},
+      {{ player.total_control|floatformat:'0' }},
+      {{ player.grand_total|floatformat:'0' }}
+      ],{% endfor %}
+      "Team": [
+      "Team",
+      {{ team.total_control|floatformat:'0' }},
+      {{ team.total_dribbling|floatformat:'0' }},
+      {{ team.total_passing|floatformat:'0' }},
+      {{ team.total_shooting|floatformat:'0' }},
+      {{ team.grand_total|floatformat:'0' }}
+      ],
+      "Club": [
+      "Club",
+      {{ club.total_control|floatformat:'0' }},
+      {{ club.total_dribbling|floatformat:'0' }},
+      {{ club.total_passing|floatformat:'0' }},
+      {{ club.total_shooting|floatformat:'0' }},
+      {{ club.grand_total|floatformat:'0' }}
+      ],
+      {% for showcase in showcase_info %}
+      "{{ showcase.showcase_name__showcase_name }}":[
+      "{{ showcase.showcase_name__showcase_name }}",
+      {{ showcase.average_shooting|floatformat:'0' }},
+      {{ showcase.average_passing|floatformat:'0' }},
+      {{ showcase.average_dribbling|floatformat:'0' }},
+      {{ showcase.average_control|floatformat:'0' }},
+      {{ showcase.average_total|floatformat:'0' }}
+      ],{% endfor %}
+    };
+
+    var tableData = {
+      "team": {
+        "team_name": "{{ team.name }}",
+        "pk": {{ team.pk }},
+        "on_run_right": {{ team.on_run_right }},
+        "on_run_left": {{ team.on_run_left }},
+        "finish_r": {{ team.finish_r }},
+        "finish_l": {{ team.finish_l }},
+        "long_r": {{ team.long_r }},
+        "long_l": {{ team.long_l }},
+        "cross_r": {{ team.cross_r }},
+        "cross_l": {{ team.cross_l }},
+        "side_r": {{ team.side_r }},
+        "side_l": {{ team.side_l }},
+        "weigh_r": {{ team.weigh_r }},
+        "weigh_l": {{ team.weigh_l }},
+        "throw_inside": {{ team.throw_inside }},
+        "throw_between": {{ team.throw_between }},
+        "speed_dribble": {{ team.speed_dribble }},
+        "dribble_r": {{ team.dribble_r }},
+        "dribble_l": {{ team.dribble_l }},
+        "dribble_3_cone": {{ team.dribble_3_cone }},
+        "foot": {{ team.foot }},
+        "thigh": {{ team.thigh }},
+        "taps": {{ team.taps }},
+        "total_control": {{ team.total_control }},
+        "total_dribbling": {{ team.total_dribbling }},
+        "total_passing": {{ team.total_passing }},
+        "total_shooting": {{ team.total_shooting }},
+        "grand_total": {{ team.grand_total }}
+      },
+      "club": {
+        "club_name": "{{ club.name }}",
+        "pk": {{ club.pk }},
+        "on_run_right": {{ club.on_run_right }},
+        "on_run_left": {{ club.on_run_left }},
+        "finish_r": {{ club.finish_r }},
+        "finish_l": {{ club.finish_l }},
+        "long_r": {{ club.long_r }},
+        "long_l": {{ club.long_l }},
+        "cross_r": {{ club.cross_r }},
+        "cross_l": {{ club.cross_l }},
+        "side_r": {{ club.side_r }},
+        "side_l": {{ club.side_l }},
+        "weigh_r": {{ club.weigh_r }},
+        "weigh_l": {{ club.weigh_l }},
+        "throw_inside": {{ club.throw_inside }},
+        "throw_between": {{ club.throw_between }},
+        "speed_dribble": {{ club.speed_dribble }},
+        "dribble_r": {{ club.dribble_r }},
+        "dribble_l": {{ club.dribble_l }},
+        "dribble_3_cone": {{ club.dribble_3_cone }},
+        "foot": {{ club.foot }},
+        "thigh": {{ club.thigh }},
+        "taps": {{ club.taps }},
+        "total_control": {{ club.total_control }},
+        "total_dribbling": {{ club.total_dribbling }},
+        "total_passing": {{ club.total_passing }},
+        "total_shooting": {{ club.total_shooting }},
+        "grand_total": {{ club.grand_total }}
+      }
+    };
+
+   var barChart = c3.generate({
+        data: {
+          columns: [
+            playerData[Object.keys(playerData)[0]],
+            playerData[Object.keys(playerData)[3]]
+          ],
+          type: "bar",
+          groups: [
+            ["data1", "data2"]
+          ],
+          labels: true,
+          selection: {
+            enabled: false
+          }
+        },
+        bar: {
+          width: {
+            ratio: 0.7
+          }
+        },
+        interaction: {
+          enabled: false
+        },
+        legend: {
+          item: {
+            onclick: function () { },
+            onmouseover: function () { }
+          }
+        },
+        grid: {
+          y: {
+            lines: [{ value: 0 }],
+
+          },
+          focus: {
+            show: false
+          }
+        },
+        bindto: '#chart-1',
+        color: {
+          pattern: ["rgb(68, 170, 67)", "rgb(53, 80, 139)"]
+        },
+        axis: {
+          x: {
+            type: "category",
+            categories: ["Shooting IQ", "Passing IQ", "Dribbling IQ", "Control IQ", "Skill IQ"]
+          },
+          y: {
+            min: 0,
+            max: 100,
+            padding: { top: 0, bottom: 0 }
+          },
+          rotated: true
+        },
+        transition: {
+          duration: 500
+        }
+      });
+
+   var barChart2 = c3.generate({
+        data: {
+          columns: [
+            playerData[Object.keys(playerData)[0]],
+            playerData.Team
+          ],
+          type: "bar",
+          groups: [
+            ["data1", "data2"]
+          ],
+          labels: true,
+          selection: {
+            enabled: false
+          }
+        },
+        bar: {
+          width: {
+            ratio: 0.7
+          }
+        },
+        interaction: {
+          enabled: false
+        },
+        legend: {
+          item: {
+            onclick: function () {},
+            onmouseover: function () {}
+          }
+        },
+        grid: {
+          y: {
+            lines: [{ value: 0 }],
+
+          },
+          focus: {
+            show: false
+          }
+        },
+        bindto: '#chart-2',
+        color: {
+          pattern: ["rgb(68, 170, 67)", "rgb(53, 80, 139)"]
+        },
+        axis: {
+          x: {
+            type: "category",
+            categories: ["Shooting IQ", "Passing IQ", "Dribbling IQ", "Control IQ", "Skill IQ"]
+          },
+          y: {
+            min: 0,
+            max: 100,
+            padding: { top: 0, bottom: 0 }
+          },
+          rotated: true
+        },
+        transition: {
+          duration: 500
+        }
+      });
+
+  </script>
+  <script>
+    function loadTable() {
+        var d = document.getElementById('averages-table').value;
+        var dataTable = document.getElementsByClassName('data-table');
+        for (var e = 0; e < dataTable.length; e++) {
+            var elems = dataTable[e].children;
+            for (var i=0; i < elems.length; i++) {
+                var c = elems[i].id;
+                var t = tableData[d][c];
+
+                var cells = dataTable[e].children[i].cells;
+                if (elems[i].className === "total") {
+                    elems[i].children[0].childNodes[1].innerHTML = t;
+                } else {
+                    cells[1].innerHTML = t;
+                }
+            }
+        }       
+    }
+
+    loadTable();
+  </script>
+  <script src="{% static "js/scripts.js" %}"></script>
+  <script src="{% static "js/bootstrap-sortable.js" %}"></script>
+  <script src="{% static "js/jquery.floatThead.min.js" %}"></script>
+{% endblock custom_scripts %}

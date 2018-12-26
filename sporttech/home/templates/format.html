@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load wagtailimages_tags %}
+
+{% block content %}
+	 <section class="container pt-2 mt-5 stretching-block">
+      <div class="row align-items-center justify-content-center mb-2">
+        <div class="col-12 col-md-11 col-lg-9 mb-4">
+
+          <h3 class="mt-4">Process</h3>
+          <div class="row align-items-center justify-content-center mb-2">
+            <div class="col-12 col-sm-5 col-lg-5">
+              <nav class="nav flex-column align-items-center justify-content-center text-center">
+                <a class="nav-link pb-0" href="#process">Process</a>
+              </nav>
+            </div>
+          </div>
+
+
+          <h3 class="mt-4">Diagrams, Animations & Scorecards</h3>
+          <div class="row align-items-center justify-content-center mb-2">
+            <div class="col-12 col-sm-5 col-lg-4">
+              <nav class="nav flex-column align-items-center justify-content-center">
+                {% for station in stations %}
+                {% if not forloop.counter|divisibleby:"2" %}
+                <a class="nav-link pb-0" href="#{{ station.name|cut:" " }}">{{ station.name }}</a>
+                {% endif %}
+                {% endfor %}
+              </nav>
+            </div>
+            <div class="col-12 col-sm-5 col-lg-4">
+              <nav class="nav flex-column align-items-center justify-content-center">
+                {% for station in stations %}
+                {% if forloop.counter|divisibleby:"2" %}
+                <a class="nav-link pb-0" href="#{{ station.name|cut:" " }}">{{ station.name }}</a>
+                {% endif %}
+                {% endfor %}
+              </nav>
+
+            </div>
+          </div>
+
+          <h3 class="mt-3">Field Layouts</h3>
+          <div class="row align-items-center justify-content-center mb-2">
+              <div class="col-12 col-sm-5 col-lg-5">
+                <nav class="nav flex-column align-items-center justify-content-center text-center">
+                  {% for field_layout in field_layouts %}
+                  <a class="nav-link pb-0" href="#{{ field_layout.name|cut:" " }}">{{ field_layout.name }}</a>
+                  {% endfor %}
+                </nav>
+              </div>
+          </div>
+          <div class="mt-5">
+            <h3 class="mt-4">Process</h3>
+            <span id="process" class="anchor"></span>
+            <div class="row mt-3 mb-2 justify-content-center">
+              <span>
+                <a href="{% static "files/process_for_skill_challenge.pdf" %}" target="_blank" class="btn btn-primary btn-sm">
+                  Process
+                  <i class="fa fa-print"></i>
+                </a>
+                <a href="{% static "files/scorekeeper_sign_in.pdf" %}" target="_blank" class="btn btn-primary btn-sm">
+                  Scorekeeper Sign-In
+                  <i class="fa fa-print"></i>
+                </a>
+                <a href="{% static "files/player_sign_in.pdf" %}" target="_blank" class="btn btn-primary btn-sm">
+                  Player Sign-In
+                  <i class="fa fa-print"></i>
+                </a>
+                <a href="{% static "files/sporttech_iq_survey.pdf" %}" target="_blank" class="btn btn-primary btn-sm">
+                  Survey
+                  <i class="fa fa-print"></i>
+                </a>
+                <a href="{% static "files/skill_challenge_report.pdf" %}" target="_blank" class="btn btn-primary btn-sm">
+                  Report
+                  <i class="fa fa-print"></i>
+                </a>
+              </span>
+            </div>
+          </div>
+
+          <h3 class="mt-5 mb-3">Diagrams, Animations & Scorecards</h3>
+
+          <!-- field layouts -->
+          {% for station in stations %}
+          <div class="mt-5">
+            <span id="{{ station.name|cut:" " }}" class="anchor"></span>
+            {% image station.image original class="img-fluid key-feature-image" alt="{{ station name }}" %}
+            <div class="row mt-3 justify-content-between">
+              <a href="#top">
+                <i class="fa fa-long-arrow-up"></i> Go to top</a>
+              <span>
+                <a href="{{ station.diagram.file.url }}" target="_blank" class="btn btn-primary btn-sm">Diagram
+                  <i class="fa fa-print"></i>
+                </a>
+                <a href="{{ station.scorecard_diagram.file.url }}" target="_blank" class="btn btn-primary btn-sm">
+                  Scorecard <i class="fa fa-file-pdf-o"></i>
+                </a>
+                {% if station.animation %}
+                  <button class="btn btn-primary btn-sm btn-animation" data-animation-file-name="{{ station.animation|cut:" " }}" data-animation-title="{{ station.animation }}" data-file-location="{{ station.animation.file.url }}">See animation <i class="fa fa-play-circle-o"></i>
+                  </button>
+                {% endif %}
+              </span>
+            </div>
+          </div>
+          {% endfor %}
+
+          <!-- field layouts -->
+          {% for field_layout in field_layouts %}
+          <div class="mt-5">
+              <span id="{{ field_layout.name|cut:" " }}" class="anchor"></span>
+              {% image field_layout.image original class="img-fluid key-feature-image" %}
+              <div class="row mt-3 justify-content-between">
+                <a href="#top">
+                  <i class="fa fa-long-arrow-up"></i> Go to top</a>
+                <span>
+                  <a href="{{ field_layout.diagram.file.url }}" target="_blank" class="btn btn-primary btn-sm">Print
+                    <i class="fa fa-print"></i>
+                  </a>
+                </span>
+              </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+  </section>
+
+{% endblock content %}
+
+{% block custom_scripts %}
+    <script>
+      $(function () {
+          $(".btn-animation").click(function () {
+              var animationFileName = $(this).data("animation-file-name");
+              var animationTitle = $(this).data("animation-title");
+              var fileLocation = $(this).data("file-location");
+              var modalID = animationFileName + "_modal";
+              var modalCode = '<div class="modal fade" id="' + modalID + '" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">' + animationTitle + '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><video id="vid" controls width=100% style="margin: 0"><source src="' + fileLocation + '" type="video/webm"><source src="' + fileLocation + '" type="video/mp4"> Sorry, your browser doesn\'t support embedded videos. </video></div></div></div></div>'
+
+              $(this).after(modalCode);
+
+              $("#" + modalID).modal();
+              $("#" + modalID).on('shown.bs.modal', function (e) {
+                  $(this).find("#vid")[0].play();
+              })
+              $("#" + modalID).on('hidden.bs.modal', function (e) {
+                  $(this).remove();
+              })
+
+          });
+      });
+  </script>
+  
+{% endblock custom_scripts %}

@@ -1,0 +1,48 @@
+{% extends "base_generic.html" %}
+
+{% block style %}
+<style>
+	body {
+		background-color: rgb(234, 234, 234);
+	}
+</style>
+{% endblock style %}
+
+{% block content %}
+{% load static %}
+
+<section class="list-page text-center">
+
+<h1>Showcase Overview</h1>
+  <p>Welcome to <em>SportTech IQ</em>. We currently have {{ player_count }} players in our database across {{ clubs }} clubs.</p>
+  <p>Showcase data can be found by clicking one of the links below</p>
+</section>
+
+<section class="container main-content">
+	<div class="row align-items-center list-item">
+			<div class="col-12 col-md-6 text-center">
+				<img class="img-fluid" src="{% static "img/drills.jpg" %}" alt="Showcase Exhibit">
+			</div>
+			<div class="col-12 col-md-6">
+				<p>Showcase your technique with over 150 touches in over 30 fun, individual game-situation drills in only about a half hour. Showcases typically have a drone taking video over the field and other cameras to capture the experience. Players will have the opportunity to view these videos online afterwards.</p>
+			</div>
+	</div>
+
+	<div class="row list-item">
+		<h1 class="col">Showcase List</h1>
+	    {% if showcase_list %}
+		<ul class="col">
+			{% for showcase in showcase_list %}
+			<li>
+				<a href="{% url 'showcase_detail' showcase.pk %}">{{ showcase.showcase_name }}</a>
+			</li>
+			{% endfor %}
+		</ul>
+		{% else %}
+			<p>Scorecard listings are currently unavailable</p>
+	    {% endif %}
+	</div>
+
+</section>
+
+{% endblock content %}

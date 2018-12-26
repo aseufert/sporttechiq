@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+
+{% block style %}
+<style>
+	body {
+		background-color: rgb(234, 234, 234);
+	}
+</style>
+{% endblock style %}
+
+{% block title %}
+{% for event in showcase %}
+	<title>{{ event }}</title>
+{% endfor %}
+{% endblock title %}
+
+{% block content %}
+
+<section class="list-page text-center">
+	{% for event in showcase %}
+	<h1>{{ event }}</h1>
+	{% endfor %}
+</section>
+
+<section class="container main-content">
+	<div class="list-item">
+		<h3 class="col-12">Participating Players:</h3>
+	    {% for player in player_in_scorecard %}
+	    <div class="row">
+		    <p class="col-12"><a href="{% url 'playerscorecard_detail' player.player.id player.player.slug %}">{{ player }}</a></p>
+	    </div>
+	    {% endfor %}
+	</div>
+</section>
+
+{% endblock content %}

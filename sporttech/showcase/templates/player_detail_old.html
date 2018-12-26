@@ -1,0 +1,907 @@
+{% extends "base_generic.html" %} 
+
+{% block title %}<title>{{ player }} - SportTech IQ</title>{% endblock title %}
+{% load static %}
+{% block headscript %}
+  <!-- Charts libraries -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.9/c3.min.js"></script>
+{% endblock headscript %}
+
+{% block content %}
+
+    <!--HEADER/TITLE OF THE HOME PAGE-->
+    <header class="container-fluid" id="scorecard-header">
+      <div class="row mt-5 align-items-center justify-content-center ">
+        <div class="col-lg-3 col-7 mt-5 mt-lg-0 px-0 px-lg-1 pt-5 pb-3 text-center">
+          <img src="{{ player.photo.url }}" alt="{{ player }}" class="player-portrait img-fluid">
+        </div>
+        <div class="col-lg-4 col-sm-12 text-center text-lg-left">
+          <div class="py-sm-4 pt-lg-6">
+            <h1>{{ player }}</h1>
+            <p>{{ player.team }} {% if player.age_group %}| {{ player.age_group }}{% endif %}</p>
+            <table class="table mt-2">
+              {% if player.birth_year %}
+              <tr>
+                <td>Born</td>
+                <td>
+                  {{ player.birth_year }}
+                </td>
+              </tr>
+              {% endif %}
+              <tr>
+                <td>Height</td>
+                <td>{{ playerscorecard.height }} in.</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-12 pb-sm-5 pb-4 pb-lg-4 pt-lg-5 text-center" id="title-image-column">
+          <h1>
+            SKILL IQ<span class="tm">&#8482;</span>: {{ playerscorecard.grand_total|floatformat:'0' }}
+          </h1>
+        </div>
+      </div>
+    </header>
+
+    <span id="card" class="anchor"></span>
+    <section class="container pt-4">
+      <h2 class="display-4">Personal trading card</h2>
+      <div class="row align-items-center justify-content-center ">
+        <div class="col-12 col-lg-5 py-2 order-12 order-lg-1 text-center">
+          <img src="{% static "img/cards/tc_user00001.png" %}" class="key-feature-image img-fluid">
+          <p class="text-center pt-2">Share the card with friends:<br>
+            <a href="mailto:?subject=Look at my own soccer trading card!&amp;body=Hi, Here is my personal trading card! http://sporttechiq.com/img/cards/tc_user00001.png Check out this site http://sporttechiq.com."><span class="fa  fa-envelope-square blue-icon"></span></a>
+            <a href="https://www.facebook.com/sharer.php?u=http%3A%2F%2Fsporttechiq.com%2Fimg%2Fcards/tc_user00001.png"><span class="fa fa-facebook-official blue-icon"></span></a>
+            <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fsporttechiq.com%2Fimg%2Fcards/tc_user00001.png&text=Look%20at%20my%20own%20SportTech%20IQ%20trading%20card!&hashtags=soccer,SportTechIQ"><span class="fa fa-twitter  blue-icon"></span></a>
+            <a href="https://plus.google.com/share?url=http%3A%2F%2Fsporttechiq.com%2Fimg%2Fcards/tc_user00001.png"><span class="fa fa-google-plus  blue-icon"></span></a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <span id="comparison" class="anchor"></span>
+    <section class="container pt-2">
+      <h2 class="display-4 py-3">Player Comparison</h2>
+      <div class="row align-items-center justify-content-center">
+        <div class="col-12 col-lg-5 text-center">
+          <div id="chart-demo-1" class="iq-chart"></div>
+          Date: <span div class="dropdown">
+              <select id="selection_1" onchange="playerChart(1)">
+                  <option value="prior">Prior</option>
+                </select>
+          </span>
+        </div>
+        <div class="col-12 col-lg-5 py-2 text-center">
+          <div id="chart-demo-2" class="iq-chart"></div>
+          Comparison: 
+          <span class="dropdown">
+              <select id="selection_2" onchange="playerChart(2)">
+                  <option value="player_comp">All Other Players</option>
+                  <option value="team">Team</option>
+                  <option value="club">Club</option>
+                </select>
+          </span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- STATS DETAILS -->
+    <span id="stats" class="anchor"></span>
+    <section class="container pt-2 mt-5">
+      <h2 class="display-4  py-3">Latest Showcase</h2>
+      <div class="row align-items-center justify-content-center">
+        <div class="col-12 col-md-11 col-lg-8">
+          <h2>Shooting</h2>
+          <table class="table stats-table table-sm">
+              <thead>
+          
+                <tr>
+                  <th scope="col"> </th>
+                  <th scope="col">
+                      1-5 stars (5 highest)
+                  </th>
+
+                </tr>
+
+              </thead>
+              <tbody>
+            <tr>
+              <th scope="row">PK
+                <span class="weight">10%</span>
+              </th>
+              
+              <td>
+                {% if playerscorecard.shoot_pk == 1.0 %}<i class="fa fa-star">{% endif %}
+                {% if playerscorecard.shoot_pk == 0.75 %}<i class="fa fa-star">{% endif %}
+                {% if playerscorecard.shoot_pk == 0.5 %}<i class="fa fa-star">{% endif %}
+                {% if playerscorecard.shoot_pk == 0.25 %}<i class="fa fa-star">{% endif %}
+                {% if playerscorecard.shoot_pk == 0 %}<i class="fa fa-star">{% endif %}
+              </td>
+              
+            </tr>
+            <tr>
+
+                <th scope="row">Free Kick
+                  <span class="weight">10%</span>
+                </th>
+
+              
+              <td>{% if playerscorecard.shoot_fk == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_fk == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_fk == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_fk == 0 %}<i class="fa fa-check">{% endif %}</td>
+              
+            </tr>
+            <tr>
+              
+                <th scope="row">On Run Right Foot
+                  <span class="weight">8.75%</span>
+                </th>
+
+              
+              <td>{% if playerscorecard.shoot_run_r_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_run_r_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_run_r_1 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_run_r_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+              
+            </tr>
+            <tr>
+              <th scope="row">On Run Right Foot
+                <span class="weight">8.75%</span>
+              </th>
+              
+              <td>{% if playerscorecard.shoot_run_r_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_run_r_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_run_r_2 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_run_r_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+              
+            </tr>
+            <tr>
+              <th scope="row">On run Left foot
+                <span class="weight">8.75%</span>
+              </th>
+              
+              <td>{% if playerscorecard.shoot_run_l_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_run_l_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_run_l_1 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_run_l_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+              
+            </tr>
+            <tr>
+              <th scope="row">On run Left foot
+                <span class="weight">8.75%</span>
+              </th>
+              
+              <td>{% if playerscorecard.shoot_run_l_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_run_l_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_run_l_2 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.shoot_run_l_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+              
+            </tr>
+            <tr>
+
+                <th scope="row" d>Finish Right foot
+                  <span class="weight">7.5%</span>
+                </th>
+
+              
+              <td>{% if playerscorecard.finisher_r_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_r_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_r_1 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_r_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+              
+            </tr>
+            <tr>
+                <th scope="row" d>Finish Left foot
+                  <span class="weight">7.5%</span>
+                </th>
+
+              
+              <td>{% if playerscorecard.finisher_l_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_l_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_l_1 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_l_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+              
+            </tr>
+            <tr>
+                <th scope="row">Finish Right foot
+                  <span class="weight">7.5%</span>
+                </th>
+
+              
+              <td>{% if playerscorecard.finisher_r_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_r_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_r_2 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_r_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+              
+            </tr>
+            <tr>
+                <th scope="row">Finish Left foot
+                  <span class="weight">7.5%</span>
+                </th>
+
+              
+              <td>{% if playerscorecard.finisher_l_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_l_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_l_2 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_l_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+              
+            </tr>
+            <tr>
+                <th scope="row">Finish Right foot
+                  <span class="weight">7.5%</span>
+                </th>
+              
+              <td>{% if playerscorecard.finisher_r_3 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_r_3 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_r_3 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_r_3 == 0 %}<i class="fa fa-check">{% endif %}</td>
+              
+            </tr>
+            <tr>
+                <th scope="row">Finish Left foot
+                  <span class="weight">7.5%</span>
+                </th>
+
+              
+              <td>{% if playerscorecard.finisher_l_3 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_l_3 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_l_3 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+              <td>{% if playerscorecard.finisher_l_3 == 0 %}<i class="fa fa-check">{% endif %}</td>
+              
+            </tr>
+            <tr class="total">
+              <th scope="row" colspan="5">Shooting IQ: {{ playerscorecard.total_shooting|floatformat:'0' }}</th>
+            </tr>
+              </tbody>
+          </table>
+
+          <h2>Passing</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+
+              <th scope="col">Exercise
+                <span class="weight">Weighting</span>
+              </th>
+
+              <th scope="col"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></th>
+              <th scope="col"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></th>
+              <th scope="col"><i class="fa fa-star"></i><i class="fa fa-star"></i></th>
+              <th scope="col"><i class="fa fa-star"></i></th>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Corner
+                  <span class="weight">5%</span>
+                </th>
+
+                
+                <td>{% if playerscorecard.corner_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.corner_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.corner_1 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.corner_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Corner
+                  <span class="weight">5%</span>
+                </th>
+
+                
+                <td>{% if playerscorecard.corner_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.corner_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.corner_2 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.corner_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Corner
+                  <span class="weight">5%</span>
+                </th>
+
+                
+                <td>{% if playerscorecard.corner_3 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.corner_3 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.corner_3 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.corner_3 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Cross Right foot
+                  <span class="weight">6.25%</span>
+                </th>
+
+                
+                <td>{% if playerscorecard.cross_r_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.cross_r_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.cross_r_1 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.cross_r_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Cross Right foot
+                  <span class="weight">6.25%</span>
+                </th>
+
+                
+                <td>{% if playerscorecard.cross_r_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.cross_r_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.cross_r_2 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.cross_r_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Cross Left foot
+                  <span class="weight">6.25%</span>
+                </th>
+
+                
+                <td>{% if playerscorecard.cross_l_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.cross_l_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.cross_l_1 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.cross_l_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Cross Left foot
+                  <span class="weight">6.25%</span>
+                </th>
+
+                
+                <td>{% if playerscorecard.cross_l_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.cross_l_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.cross_l_2 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.cross_l_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Side Pass Right foot
+                  <span class="weight">2.5%</span>
+                </th>
+
+                
+                <td>{% if playerscorecard.side_pass_r_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_r_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_r_1 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_r_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Side Pass Right foot
+                  <span class="weight">2.5%</span>
+                </th>
+
+                
+                <td>{% if playerscorecard.side_pass_r_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_r_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_r_2 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_r_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Side Pass Right foot
+                  <span class="weight">2.5%</span>
+                </th>
+
+                
+                <td>{% if playerscorecard.side_pass_r_3 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_r_3 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_r_3 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_r_3 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Side Pass Left foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.side_pass_l_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_l_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_l_1 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_l_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Side Pass Left foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.side_pass_l_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_l_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_l_2 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_l_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Side Pass Left foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.side_pass_l_3 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_l_3 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_l_3 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.side_pass_l_3 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Obstructed Pass Right foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.obs_pass_r_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_r_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_r_1 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_r_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Obstructed Pass Right foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.obs_pass_r_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_r_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_r_2 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_r_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Obstructed Pass Right foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.obs_pass_r_3 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_r_3 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_r_3 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_r_3 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Obstructed Pass Left foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.obs_pass_l_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_l_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_l_1 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_l_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Obstructed Pass Left foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.obs_pass_l_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_l_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_l_2 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_l_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Obstructed Pass Left foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.obs_pass_l_3 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_l_3 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_l_3 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.obs_pass_l_3 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Weighted Pass Right foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.weigh_pass_r_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_r_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_r_1 == 0.25 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_r_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Weighted Pass Right foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.weigh_pass_r_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_r_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_r_2 == 0.25 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_r_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Weighted Pass Right foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.weigh_pass_r_3 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_r_3 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_r_3 == 0.25 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_r_3 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Weighted Pass Left foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.weigh_pass_l_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_l_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_l_1 == 0.25 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_l_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Weighted Pass Left foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.weigh_pass_l_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_l_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_l_2 == 0.25 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_l_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Weighted Pass Left foot
+                  <span class="weight">2.5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.weigh_pass_l_3 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_l_3 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_l_3 == 0.25 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.weigh_pass_l_3 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Throw-in
+                  <span class="weight">5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.throw_1 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.throw_1 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.throw_1 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.throw_1 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Throw-in
+                  <span class="weight">5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.throw_2 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.throw_2 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.throw_2 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.throw_2 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Throw-in
+                  <span class="weight">5%</span>
+                </th>
+                
+                <td>{% if playerscorecard.throw_3 == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.throw_3 == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.throw_3 == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.throw_3 == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+              </tr>
+              <tr class="total">
+                  <th scope="row" colspan="5">Passing IQ: {{ playerscorecard.total_passing|floatformat:'0' }}</th>
+                </tr>
+            </tbody>
+          </table> 
+
+          <h2>Dribbling</h2>
+          <table class="table stats-table table-sm">
+              <thead>
+                <tr>
+                    <th scope="col">Exercise
+                      <span class="weight">Weighting</span>
+                    </th>
+                  <th scope="col"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></th>
+                  <th scope="col"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></th>
+                  <th scope="col"><i class="fa fa-star"></i><i class="fa fa-star"></i></th>
+                  <th scope="col"><i class="fa fa-star"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <th scope="row">Speed Dribble Both Feet
+                      <span class="weight">25%</span>
+                    </th>
+                    
+                    <td>{% if playerscorecard.speed_dribble == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                    <td>{% if playerscorecard.speed_dribble == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                    <td>{% if playerscorecard.speed_dribble == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                    <td>{% if playerscorecard.speed_dribble == 0 %}<i class="fa fa-check">{% endif %}</td>
+                    
+                </tr>
+                <tr>
+                  <th scope="row">Dribble Both feet
+                    <span class="weight">25%</span>
+                  </th>
+                    
+                    <td>{% if playerscorecard.dribble == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                    <td>{% if playerscorecard.dribble == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                    <td>{% if playerscorecard.dribble == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                    <td>{% if playerscorecard.dribble == 0 %}<i class="fa fa-check">{% endif %}</td>
+                    
+                </tr>
+                <tr>
+                    <th scope="row">Dribble Right foot
+                      <span class="weight">25%</span>
+                    </th>
+                    
+                    <td>{% if playerscorecard.dribble_r == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                    <td>{% if playerscorecard.dribble_r == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                    <td>{% if playerscorecard.dribble_r == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                    <td>{% if playerscorecard.dribble_r == 0 %}<i class="fa fa-check">{% endif %}</td>
+                    
+                </tr>
+                <tr>
+                  <th scope="row">Dribble Left foot
+                    <span class="weight">25%</span>
+                  </th>
+                    
+                    <td>{% if playerscorecard.dribble_l == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                    <td>{% if playerscorecard.dribble_l == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                    <td>{% if playerscorecard.dribble_l == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                    <td>{% if playerscorecard.dribble_l == 0 %}<i class="fa fa-check">{% endif %}</td>
+                    
+                </tr>
+                <tr class="total">
+                  <th scope="row" colspan="5">Dribbling IQ: {{ playerscorecard.total_dribbling|floatformat:'0' }}</th>
+                </tr>
+              </tbody>
+          </table>
+
+          <h2>Control</h2>
+          <table class="table stats-table table-sm">
+              <thead>
+            <tr>
+              <th scope="col">Exercise
+                <span class="weight">Weighting</span>
+              </th>
+              <th scope="col"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></th>
+              <th scope="col"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></th>
+              <th scope="col"><i class="fa fa-star"></i><i class="fa fa-star"></i></th>
+              <th scope="col"><i class="fa fa-star"></i></th>
+            </tr>
+              </thead>
+              <tbody>
+            <tr>
+                <th scope="row">Control with Chest
+                  <span class="weight">20%</span>
+                </th>
+                
+                <td>{% if playerscorecard.control_chest == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.control_chest == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.control_chest == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.control_chest == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+            </tr>
+            <tr>
+                <th scope="row">Control with Thigh
+                  <span class="weight">20%</span>
+                </th>
+                
+                <td>{% if playerscorecard.control_thigh == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.control_thigh == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.control_thigh == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.control_thigh == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+            </tr>
+            <tr>
+                <th scope="row">Control with Foot
+                  <span class="weight">20%</span>
+                </th>
+                
+                <td>{% if playerscorecard.foot_tap == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.foot_tap == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.foot_tap == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.foot_tap == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+            </tr>
+            <tr>
+                <th scope="row">Receive
+                  <span class="weight">20%</span>
+                </th>
+                
+                <td>{% if playerscorecard.receive == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.receive == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.receive == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.receive == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+            </tr>
+            <tr>
+                <th scope="row">Juggling on run
+                  <span class="weight">20%</span>
+                </th>
+                
+                <td>{% if playerscorecard.juggling_on_run == 1.0 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.juggling_on_run == 0.75 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.juggling_on_run == 0.5 %}<i class="fa fa-check">{% endif %}</td>
+                <td>{% if playerscorecard.juggling_on_run == 0 %}<i class="fa fa-check">{% endif %}</td>
+                
+            </tr>
+            <tr class="total">
+              <th scope="row" colspan="5">Control IQ: {{ playerscorecard.total_control|floatformat:'0' }}</th>
+            </tr>
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+{% endblock content %}
+{% block custom_scripts %}
+  <script>
+    var data = {
+      "player": [
+      "{{ player }}",
+      {{ playerscorecard.total_shooting|floatformat:'0' }},
+      {{ playerscorecard.total_passing|floatformat:'0' }},
+      {{ playerscorecard.total_dribbling|floatformat:'0' }},
+      {{ playerscorecard.total_control|floatformat:'0' }},
+      {{ playerscorecard.grand_total|floatformat:'0' }}
+      ],
+      "prior":[
+      "Prior",
+      {{ prior.total_shooting|floatformat:'0' }},
+      {{ prior.total_passing|floatformat:'0' }},
+      {{ prior.total_dribbling|floatformat:'0' }},
+      {{ prior.total_control|floatformat:'0' }},
+      {{ prior.grand_total|floatformat:'0' }}
+      ],
+      "player_comp": [
+        "All Other players",
+        {{ shooting_avg|floatformat:'0' }},
+        {{ passing_avg|floatformat:'0' }},
+        {{ dribbling_avg|floatformat:'0' }},
+        {{ control_avg|floatformat:'0' }},
+        {{ athletic_avg|floatformat:'0' }},
+        {{ iq_avg|floatformat:'0' }}
+        ],
+      "club": [
+        "Club",
+        {{player.team.club.total_shooting_avg|floatformat:'0' }},
+        {{ player.team.club.total_passing_avg|floatformat:'0' }},
+        {{ player.team.club.total_dribbling_avg|floatformat:'0' }},
+        {{ player.team.club.total_control_avg|floatformat:'0' }},
+        {{ player.team.club.grand_total_avg|floatformat:'0' }}
+        ],
+      "team": [
+        "Team",
+        {{ player.team.total_shooting_avg|floatformat:'0' }},
+        {{ player.team.total_passing_avg|floatformat:'0' }},
+        {{ player.team.total_dribbling_avg|floatformat:'0' }},
+        {{ player.team.total_control_avg|floatformat:'0' }},
+        {{ player.team.grand_total_avg|floatformat:'0' }}
+        ]
+    };
+
+    var chartOne = c3.generate({
+        data: {
+          columns: [
+            data.player,
+            data.prior
+          ],
+          type: "bar",
+          groups: [
+            ["data1", "data2"]
+          ],
+          labels: true,
+          selection: {
+            enabled: false
+          }
+        },
+        bar: {
+          width: {
+            ratio: 0.7
+          }
+        },
+        interaction: {
+          enabled: false
+        },
+        legend: {
+          item: {
+            onclick: function () { },
+            onmouseover: function () { }
+          }
+        },
+        grid: {
+          y: {
+            lines: [{ value: 0 }],
+
+          },
+          focus: {
+            show: false
+          }
+        },
+        bindto: "#chart-demo-1",
+        color: {
+          pattern: ["rgb(68, 170, 67)", "rgb(53, 80, 139)"]
+        },
+        axis: {
+          x: {
+            type: "category",
+            categories: ["Shooting IQ", "Passing IQ", "Dribbling IQ", "Control IQ", "Skill IQ"]
+          },
+          y: {
+            min: 0,
+            max: 100,
+            padding: { top: 0, bottom: 0 }
+          },
+          rotated: true
+        },
+        transition: {
+          duration: 500
+        }
+    });
+
+    var chartTwo = c3.generate({
+        data: {
+          columns: [
+            data.player,
+            data.player_comp
+          ],
+          type: "bar",
+          groups: [
+            ["data1", "data2"]
+          ],
+          labels: true,
+          selection: {
+            enabled: false
+          }
+        },
+        bar: {
+          width: {
+            ratio: 0.7
+          }
+        },
+        interaction: {
+          enabled: false
+        },
+        legend: {
+          item: {
+            onclick: function () { },
+            onmouseover: function () { }
+          }
+        },
+        grid: {
+          y: {
+            lines: [{ value: 0 }],
+
+          },
+          focus: {
+            show: false
+          }
+        },
+        bindto: "#chart-demo-2",
+        color: {
+          pattern: ["rgb(68, 170, 67)", "rgb(53, 80, 139)"]
+        },
+        axis: {
+          x: {
+            type: "category",
+            categories: ["Shooting IQ", "Passing IQ", "Dribbling IQ", "Control IQ", "Skill IQ"]
+          },
+          y: {
+            min: 0,
+            max: 100,
+            padding: { top: 0, bottom: 0 }
+          },
+          rotated: true
+        },
+        transition: {
+          duration: 500
+        }
+    });
+  </script>
+  <script src="{% static "js/scripts.js" %}"></script>
+{% endblock custom_scripts %}

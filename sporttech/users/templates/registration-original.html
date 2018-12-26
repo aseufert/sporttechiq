@@ -1,0 +1,69 @@
+{% extends "base.html" %} 
+
+{% block title %}<title>User Profile - SportTech IQ</title>{% endblock title %}
+{% load static %}
+{% block headscript %}
+{% endblock headscript %}
+
+{% block content %}
+
+<section class="login">
+    <section class="mt-md-5 signup-box">
+        <div class="row no-gutters">
+            <div class="mx-auto mt-5 box">
+                <form method="post" action="{% url 'registration' %}" class="login-form">
+                  <h2>Register for a Club Below:</h2>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" class="form-control sign-up" autofocus maxlength="254" required name="{{ form.first_name.html_name }}" id="{{ form.first_name.id_for_label }}" placeholder="First Name" value="{{ user.first_name }}">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control sign-up" autofocus maxlength="254" required name="{{ form.last_name.html_name }}" id="{{ form.last_name.id_for_label }}" placeholder="Last Name" value="{{ user.last_name }}">
+                    </div>
+
+                    <div class="form-group">
+                        <select name="{{ form.birth_year.html_name }}" id="{{ form.birth_year.id_for_label }}">
+                            {% for choice in form.birth_year %}
+                                {{ choice }}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select name="{{ form.gender.html_name }}" id="{{ form.gender.id_for_label }}">
+                            {% for choice in form.genders %}
+                                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control sign-up" autofocus maxlength="254" required name="{{ form.city.html_name }}" id="{{ form.city.id_for_label }}" placeholder="City">
+                    </div>
+
+                    <div class="form-group">
+                        <select name="{{ form.state.html_name }}" id="{{ form.state.id_for_label }}">
+                            {% for choice in form.states %}
+                                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control sign-up" autofocus maxlength="254" required name="{{ form.registration_code.html_name }}" id="{{ form.registration_code.id_for_label }}" placeholder="Registration Code">
+                    </div>
+                    <div>
+                        <input type="submit" value="Sign Up" class="btn btn-primary" />
+                    </div>
+                    {% if form.errors %}
+                       {% for field in form %}
+                          {% for error in field.errors %}
+                              <p class="form-error">- {{ error|escape }}</p>
+                          {% endfor %}
+                       {% endfor %}
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </section>
+</section>
+{% endblock content %}

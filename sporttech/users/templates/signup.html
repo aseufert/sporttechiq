@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Signup - Sport Tech IQ</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Required libraries -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:400,600&amp;subset=latin-ext">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+
+    <script src="{% static "js/jquery.min.js" %}"></script>
+    <style>
+      .form-error {
+        color: red;
+      }
+    </style>
+</head>
+
+<body id="top" class="sign-page">
+  <div>
+    <div>
+      <a href="/" title="SportTechIQ">
+        <span class="navbar-brand ml-3 ml-lg-5 mb-3 mb-md-0">SportTech IQ &#8482;</span>
+      </a>
+    </div>
+
+    <div class="row align-items-center justify-content-center">
+
+      <form method="post" action="{% url 'signup' %}" id="signup-form" class="col-10 col-md-9 col-lg-6 p-3 p-md-4 login-form">
+
+        {% csrf_token %}
+        <h2 class="display-4 pb-3">Sign Up</h2>
+
+        <label class="col-form-label">Your Name</label>
+        <span class="required-field"> *</span>
+        <div class="form-group row no-gutters ">
+
+          <div class="col-12 col-md-6 pr-md-2 mb-1">
+            <input type="text" class="form-control" maxlength="254" required name="{{ form.first_name.html_name }}" id="{{ form.first_name.id_for_label }}" placeholder="First Name">
+
+            {% for error in form.first_name.errors %}
+              <span class="form-error">{{ error|escape }}</span>
+            {% endfor %}
+          </div>
+
+          <div class="col-12 col-md-6 pl-md-2 mb-1">
+            <input type="text" class="form-control" maxlength="254" required name="{{ form.last_name.html_name }}" id="{{ form.last_name.id_for_label }}" placeholder="Last Name">
+
+            {% for error in form.last_name.errors %}
+              <span class="form-error">{{ error|escape }}</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-form-label" for="id_email">Email</label> 
+          <span class="required-field"> *</span>
+          <input type="email" class="form-control" id="{{ form.email.id_for_label }}" required name="{{ form.email.html_name }}" placeholder="user@example.com">
+
+
+          {% for error in form.email.errors %}
+            <span class="form-error">{{ error|escape }}</span>
+          {% endfor %}
+        </div>
+
+        <div class="form-group">
+          <label class="col-form-label" for="{{ form.username.id_for_label }}">Username</label> 
+          <span class="required-field"> *</span>
+          <input type="text" class="form-control" id="{{ form.username.id_for_label }}" required name="{{ form.username.html_name }}" placeholder="Username">
+
+          {% for error in form.username.errors %}
+            <span class="form-error">{{ error|escape }}</span>
+          {% endfor %}
+        </div>
+
+
+        <div class="col-12 col-md-6 px-0 mb-1">
+          <label class="col-form-label" for="">User Type</label>
+          <span class="required-field"> *</span>
+          <select id="{{ form.user_type.html_name }}" required name="{{ form.user_type.html_name }}" class="form-control">
+              {% for choice in form.user_type %}
+              {{ choice }}
+              {% endfor %}
+          </select>
+
+          {% for error in form.user_type.errors %}
+            <span class="form-error">{{ error|escape }}</span>
+          {% endfor %}
+        </div>
+
+        <div class="form-group">
+          <label class="col-form-label" for="id_password1">Password</label>
+          <span class="required-field"> *</span>
+          <input type="password" class="form-control" id="{{ form.password1.id_for_label }}" required name="{{ form.password1.html_name }}" placeholder="Password" pattern=".{5,}"
+            title="Password must be at least 5 symbols" data-toggle="tooltip" data-placement="top">
+
+          {% for error in form.password1.errors %}
+            <span class="form-error">{{ error|escape }}</span>
+          {% endfor %}
+        </div>
+
+        <div class="form-group">
+          <label class="col-form-label" for="id_password2">Password Confirmation</label>
+          <span class="required-field"> *</span>
+          <input type="password" class="form-control sign-up" id="{{ form.password2.id_for_label }}" required name="{{ form.password2.html_name }}" placeholder="Password Confirmation">
+
+          {% for error in form.password2.errors %}
+            <span class="form-error">{{ error|escape }}</span>
+          {% endfor %}
+        </div>
+
+        <div>
+          <input type="submit" value="Sign Up" class="btn btn-primary my-2">
+        </div>
+
+        <p class="mt-3 mb-1 text-right">
+          By clicking "Sign Up", you agree to the
+          <a href="/terms-of-use/">Terms of Service</a>.
+        </p>
+      </form>
+
+    </div>
+    <div class="copyright col-12 py-4 text-center">© 2018 Sport Tech IQ. All Rights Reserved.</div>
+    </div>
+    <script src="{% static "js/jquery.min.js" %}"></script>
+    <script src="{% static "js/popper.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+
+    <!--ENABLE TOOLTIPS-->
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip();
+        })
+
+
+        $("#id_password1").change(function () {
+          if ($("#id_password1").val().length < 5) {
+            $("#id_password1")[0].setCustomValidity("Password must be longer than 4 characters");
+          } else {
+            $("#id_password1")[0].setCustomValidity("");
+          }
+        });
+
+        $("#id_password2").change(function () {
+          if ($("#id_password1").val() != $("#id_password2").val()) {
+            $("#id_password2")[0].setCustomValidity("Passwords don't match");
+          } else {
+            $("#id_password2")[0].setCustomValidity("");
+          }
+        });
+
+        $("#signup-form").addEventListener('submit', function (event) {
+          if ($("#signup-form").checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          $("#signup-form").classList.add('was-validated');
+        }, false);
+    </script>
+
+</body>
+</html>

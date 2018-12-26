@@ -1,0 +1,454 @@
+{% extends "base.html" %} 
+
+{% block title %}Player Example - SportTech IQ{% endblock title %}
+{% load static %}
+{% block headscript %}
+        <!-- Charts libraries -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.9/c3.min.js"></script>
+{% endblock headscript %}
+
+{% block content %}
+
+    <span id="card" class="anchor"></span>
+    <section class="container pt-7 ">
+      <div class="row align-items-center justify-content-center ">
+        <div class="col-12 col-lg-5 py-2 order-12 order-lg-1 text-center">
+          <img src="{% static "img/tc_user00101.png" %}" class="key-feature-image img-fluid info-full">
+          <p class="text-center pt-2">
+            <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fsporttechiq.com%2Fimg%2Fcards/tc_user00101.png&text=Look%20at%20my%20own%20SportTech%20IQ%20trading%20card!&hashtags=soccer,SportTechIQ">
+              <span class="fa fa-twitter blue-icon"></span>
+            </a>
+            <a href="https://www.facebook.com/sharer.php?u=http%3A%2F%2Fsporttechiq.com%2Fimg%2Fcards/tc_user00101.png">
+              <span class="fa fa-facebook-official blue-icon"></span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <span id="comparison" class="anchor"></span>
+    <section class="container pt-2">
+      <h2 class="display-4 py-3">Player Comparison</h2>
+      <div class="row align-items-center justify-content-center">
+        <div class="col-12 col-lg-5 text-center">
+          <div id="chart-demo-1" class="iq-chart info-full"></div>
+          Date:
+          <span div class="dropdown">
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="time-compare-player-dropdown"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Latest
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="time-compare-player-dropdown">
+              <a class="dropdown-item" href="#" data-value="8/15/18">Latest</a>
+              <!--<a class="dropdown-item disabled" href="#" data-value="8/15/18">8/15/18</a>-->
+            </div>
+          </span>
+        </div>
+        <div class="col-12 col-lg-5 py-2 text-center">
+          <div id="chart-demo-2" class="iq-chart info-full"></div>
+          Comparison:
+          <span class="dropdown">
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="competitor-age-dropdown"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Any birth year
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="competitor-age-dropdown">
+              <a class="dropdown-item" href="#" data-value="all">Any birth year</a>
+              <a class="dropdown-item disabled" href="#" data-value="2012">Birth year 2012</a>
+              <a class="dropdown-item disabled" href="#" data-value="2011">Birth year 2011</a>
+            </div>
+          </span>
+          <span class="dropdown">
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="competitor-gender-dropdown"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Male
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="competitor-gender-dropdown">
+              <a class="dropdown-item" href="#" data-value="M">Male</a>
+              <a class="dropdown-item disabled" href="#" data-value="F">Female</a>
+              <a class="dropdown-item disabled" href="#" data-value="all">All genders</a>
+            </div>
+          </span>
+        </div>
+      </div>
+    </section>
+
+
+    <!--STATS DETAILS-->
+    <span id="stats" class="anchor"></span>
+    <section class="container pt-2 mt-5">
+      <h2 class="display-4  py-3">Latest Skill Challenge</h2>
+      <div class="text-center pt-2 pb-3">
+        <span class="dropdown">
+          <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="player-date-dropdown" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">Latest
+            <span class="caret"></span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-xs" aria-labelledby="player-date-dropdown">
+            <a class="dropdown-item active" href="#" data-value="all">Latest</a>
+            <!--<a class="dropdown-item disabled" href="#" data-value="1/13/18">1/13/18</a>-->
+          </div>
+        </span>
+      </div>
+
+
+      <!-- <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i> -->
+
+      <div class="row align-items-center justify-content-center">
+        <div class="col-12 col-md-11 col-lg-8">
+          <h2>Shooting</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">
+                  1-5 stars (5 highest)
+                </th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">PK</th>
+                <td>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">On run Right foot</th>
+                <td>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">On run Left foot</th>
+                <td>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Finish Right foot</th>
+                <td>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Finish Left foot</th>
+                <td>
+
+                </td>
+              </tr>
+              <tr class="total">
+                <th scope="row" colspan="2">Shooting IQ: 32</th>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <h2>Passing</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+              <th scope="col">
+              </th>
+              <th scope="col">
+                1-5 stars (5 highest)
+              </th>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Long Right Foot</th>
+                <td>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Long Left Foot</th>
+                <td>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Cross Right Foot</th>
+                <td>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Cross Left Foot</th>
+                <td>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Side Pass Right foot</th>
+                <td>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Side Pass Left foot</th>
+                <td>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Weighted Pass Right foot</th>
+                <td>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Weighted Pass Left foot</th>
+                <td>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Throw-in inside box</th>
+                <td>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Throw-in between far cones</th>
+                <td>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                </td>
+              </tr>
+
+              <tr class="total">
+                <th scope="row" colspan="2">Passing IQ: 29</th>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <h2>Dribbling</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">
+                  1-5 stars (5 highest)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Speed Dribble Both Feet</th>
+                <td>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Dribble Right foot</th>
+                <td>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Dribble Left foot</th>
+                <td>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Dribble 3-Cone</th>
+                <td>
+
+                </td>
+              </tr>
+              <tr class="total">
+                <th scope="row" colspan="2">Dribbling IQ: 81</th>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <h2>Control</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">
+                  1-5 stars (5 highest)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Thigh</th>
+                <td>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Foot</th>
+                <td>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Taps</th>
+                <td>
+
+                </td>
+              </tr>
+              <tr class="total">
+                <th scope="row" colspan="2">Control IQ: 17</th>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="display-4 text-primary mb-5">
+            Skill IQ: 26
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+{% endblock content %}
+
+{% block custom_scripts %}
+    <script src="{% static "js/bootstrap-sortable.js" %}"></script>
+    <script src="{% static "js/jquery.floatThead.min.js" %}"></script>
+    <script>
+    var barChart = function (id, data1, data2) {
+      c3.generate({
+        data: {
+          columns: [
+            data1,
+            data2
+          ],
+          type: "bar",
+          groups: [
+            ["data1", "data2"]
+          ],
+          labels: true,
+          selection: {
+            enabled: false
+          }
+        },
+        bar: {
+          width: {
+            ratio: 0.7
+          }
+        },
+        interaction: {
+          enabled: false
+        },
+        legend: {
+          item: {
+            onclick: function () { },
+            onmouseover: function () { }
+          }
+        },
+        grid: {
+          y: {
+            lines: [{ value: 0 }],
+
+          },
+          focus: {
+            show: false
+          }
+        },
+        bindto: id,
+        color: {
+          pattern: ["rgb(68, 170, 67)", "rgb(53, 80, 139)"]
+        },
+        axis: {
+          x: {
+            type: "category",
+            categories: ["Shooting IQ", "Passing IQ", "Dribbling IQ", "Control IQ", "Skill IQ"]
+          },
+          y: {
+            min: 0,
+            max: 100,
+            padding: { top: 0, bottom: 0 }
+          },
+          rotated: true
+        },
+        transition: {
+          duration: 500
+        }
+      });
+    };
+
+    var chartData1 = ["Latest Showcase", 48, 47, 85, 83, 66];
+    var chartData2 = ["Prior Showcase", 50, 56, 72, 80, 65];
+    barChart("#chart-demo-1", chartData1, chartData2);
+
+    var chartData1 = ["Sal Soccer", 48, 47, 85, 83, 66];
+    var chartData2 = ["All players:  Any birth year, Male", 65, 68, 45, 65, 65];
+    barChart("#chart-demo-2", chartData1, chartData2);
+
+    </script>
+
+  
+
+    <script>
+        /*MAKE TH FIXED IF PLUGIN LOADED*/
+
+        $(function () {
+            if (jQuery().floatThead) {
+                $('table.stats-table').floatThead({
+                    position: 'fixed',
+                    top: $('#top-menu').height()
+                });
+            }
+        });
+    </script>
+    
+{% endblock custom_scripts %}

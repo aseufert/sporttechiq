@@ -1,0 +1,609 @@
+{% extends "base.html" %} 
+
+{% block title %}{{ player }} - SportTech IQ{% endblock title %}
+{% load static %}
+{% block headscript %}
+  <!-- Charts libraries -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.9/c3.min.js"></script>
+{% endblock headscript %}
+
+{% block content %}
+
+   <!--HEADER/TITLE OF THE HOME PAGE-->
+    <header class="container-fluid" id="scorecard-header">
+      <div class="row mt-5 align-items-center justify-content-center ">
+        <div class="col-lg-3 col-7 mt-5 mt-lg-0 px-0 px-lg-1 pt-5 pb-3 text-center">
+          {% if  player.photo %}
+            <img src="{{ player.photo.url }}" alt="{{ player }}" class="player-portrait img-fluid">
+          {% else %}
+            <img src="{% static "img/default_profile.png" %}" alt="{{ player }}" class="player-portrait img-fluid">
+          {% endif %}
+        </div>
+        <div class="col-lg-4 col-sm-12 text-center text-lg-left">
+          <div class="py-sm-4 pt-lg-6">
+            <h1>{{ player }}</h1>
+            <p>{{ player.team }}</p>
+            <table class="table mt-2">
+              <tr>{% if player.birth_year %}
+                <td>Birth Year</td>
+                <td>{{ player.birth_year }}</td>
+              </tr>{% endif %}
+              {% if scorecard.height %}
+              <tr>
+                <td>Height</td>
+                <td>{{ scorecard.height }}</td>
+              </tr>{% endif %}
+            </table>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-12 pb-sm-5 pb-4 pb-lg-4 pt-lg-5 text-center" id="title-image-column">
+          <h1>
+            SKILL IQ: {% if scorecard %}{{ scorecard.grand_total|floatformat:'0' }}{% endif %}
+          </h1>
+        </div>
+      </div>
+    </header>
+
+    {% if player.trading_card %}
+    <span id="card" class="anchor"></span>
+    <section class="container pt-4">
+      <h2 class="display-4">Personal trading card</h2>
+      <div class="row align-items-center justify-content-center ">
+        <div class="col-12 col-lg-5 py-2 order-12 order-lg-1 text-center">
+          <img src="{{ player.trading_card.url }}" class="key-feature-image img-fluid" alt="{{ player }}">
+          <p class="text-center pt-2">Share the card with friends:<br>
+            <a href="mailto:?subject=Look at my own soccer trading card!&amp;body=Hi, Here is my personal trading card! {{ player.trading_card.url }} Check out this site http://www.sporttechiq.com."><span class="fa  fa-envelope-square blue-icon"></span></a>
+            <a href="https://www.facebook.com/sharer.php?u={{ player.trading_card.url }}"><span class="fa fa-facebook-official blue-icon"></span></a>
+            <a href="https://twitter.com/intent/tweet?url={{ player.trading_card.url }}&text=Look%20at%20my%20own%20SportTech%20IQ%20trading%20card!&hashtags=soccer,SportTechIQ"><span class="fa fa-twitter  blue-icon"></span></a>
+            <a href="https://plus.google.com/share?url={{ player.trading_card.url }}"><span class="fa fa-google-plus  blue-icon"></span></a>
+          </p>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <span id="comparison" class="anchor"></span>
+    <section class="container pt-2">
+      <h2 class="display-4 py-3">Player Comparison</h2>
+      {% if scorecard %}
+      <div class="row align-items-center justify-content-center">
+        {% if showcases|length > 1 %}
+        <div class="col-12 col-lg-5 text-center">
+          <div id="chart-demo-1" class="iq-chart"></div>
+          Date: <span div class="dropdown">
+              <select id="selection_1" onchange="playerChart(1)">{% for showcase in showcases %}
+                  <option value="{{ forloop.counter0 }}">{{ showcase.showcase_name }}</option>
+              {% endfor %}
+                </select>
+          </span>
+        </div>
+        {% endif %}
+        <div class="col-12 col-lg-5 py-2 text-center">
+          <div id="chart-demo-2" class="iq-chart"></div>
+          Comparison: 
+          <span class="dropdown">
+              <select id="selection_2" onchange="playerChart(2)">
+                  <option value="player_comp">All Other Players</option>
+                  <option value="team">Team</option>
+                  <option value="club">Club</option>
+                </select>
+          </span>
+        </div>
+      </div>
+      {% else %}
+      <div class="row align-items-center justify-content-center">
+        <div class="col-12 text-center">
+          <p>Player has no data</p>
+        </div>
+      </div>
+      {% endif %}
+    </section>
+
+
+    <!-- STATS DETAILS -->
+    <span id="stats" class="anchor"></span>
+    <section class="container pt-2 mt-5">
+      <h2 class="display-4  py-3">Latest Showcase</h2>
+      <div class="row align-items-center justify-content-center">
+        <div class="col-12 col-md-11 col-lg-8">
+          <h2>Shooting</h2>
+          <table class="table stats-table table-sm">
+              <thead>
+                <tr>
+                  <th scope="col"> </th>
+                  <th scope="col">1-5 stars (5 highest)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">PK</th>
+                  <td>
+                  {% if scorecard.pk == 1.0 %}<i class="fa fa-star">{% endif %}
+                  {% if scorecard.pk >= 0.75 %}<i class="fa fa-star">{% endif %}
+                  {% if scorecard.pk >= 0.5 %}<i class="fa fa-star">{% endif %}
+                  {% if scorecard.pk >= 0.25 %}<i class="fa fa-star">{% endif %}
+                  {% if scorecard.pk >= 0 %}<i class="fa fa-star">{% endif %}
+                  </td>
+                </tr>
+                <tr>
+                    <th scope="row">On Run Right Foot
+                    </th>
+                    <td>
+                    {% if scorecard.on_run_right == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.on_run_right >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.on_run_right >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.on_run_right >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.on_run_right >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                  <th scope="row">On run Left Foot
+                  </th>
+                  <td>
+                  {% if scorecard.on_run_left == 1.0 %}<i class="fa fa-star">{% endif %}
+                  {% if scorecard.on_run_left >= 0.75 %}<i class="fa fa-star">{% endif %}
+                  {% if scorecard.on_run_left >= 0.5 %}<i class="fa fa-star">{% endif %}
+                  {% if scorecard.on_run_left >= 0.25 %}<i class="fa fa-star">{% endif %}
+                  {% if scorecard.on_run_left >= 0 %}<i class="fa fa-star">{% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Finish Right Foot
+                    </th>
+                    <td>
+                    {% if scorecard.finish_r == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.finish_r >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.finish_r >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.finish_r >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.finish_r >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Finish Left Foot
+                    </th>
+                    <td>
+                    {% if scorecard.finish_l == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.finish_l >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.finish_l >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.finish_l >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.finish_l >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr class="total">
+                  <th scope="row" colspan="2">Shooting IQ: {{ scorecard.total_shooting|floatformat:'0' }}</th>
+                </tr>
+              </tbody>
+          </table>
+
+          <h2>Passing</h2>
+          <table class="table stats-table table-sm">
+            <thead>
+              <th scope="col">
+              </th>
+              <th scope="col">
+                1-5 stars (5 highest)
+              </th>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Long Right Foot
+                    </th>
+                    <td>
+                    {% if scorecard.long_r == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.long_r >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.long_r >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.long_r >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.long_r >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Long Left Foot
+                    </th>
+                    <td>
+                    {% if scorecard.long_l == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.long_l >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.long_l >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.long_l >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.long_l >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Cross Right Foot
+                    </th>
+                    <td>
+                    {% if scorecard.cross_r == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.cross_r >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.cross_r >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.cross_r >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.cross_r >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Cross Left Foot
+                    </th>
+                    <td>
+                    {% if scorecard.cross_l == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.cross_l >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.cross_l >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.cross_l >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.cross_l >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Side Pass Right Foot
+                    </th>
+                    <td>
+                    {% if scorecard.side_r == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.side_r >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.side_r >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.side_r >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.side_r >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Side Pass Left Foot
+                    </th>
+                    <td>
+                    {% if scorecard.side_l == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.side_l >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.side_l >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.side_l >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.side_l >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Weighted Pass Right Foot
+                    </th>
+                    <td>
+                    {% if scorecard.weigh_r == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.weigh_r >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.weigh_r >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.weigh_r >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.weigh_r >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Weighted Pass Left Foot
+                    </th>
+                    <td>
+                    {% if scorecard.weigh_l == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.weigh_l >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.weigh_l >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.weigh_l >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.weigh_l >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Throw-in Inside Box
+                    </th>
+                    <td>
+                    {% if scorecard.throw_inside == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.throw_inside >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.throw_inside >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.throw_inside >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.throw_inside >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Throw-in Between Far Cones
+                    </th>
+                    <td>
+                    {% if scorecard.throw_between == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.throw_between >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.throw_between >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.throw_between >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.throw_between >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+              <tr class="total">
+                  <th scope="row" colspan="2">Passing IQ: {{ scorecard.total_passing|floatformat:'0' }}</th>
+                </tr>
+            </tbody>
+          </table> 
+
+          <h2>Dribbling</h2>
+          <table class="table stats-table table-sm">
+              <thead>
+                <tr>
+                  <th scope="col"> </th>
+                  <th scope="col">
+                    1-5 stars (5 highest)
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <th scope="row">Speed Dribble Both Feet
+                    </th>
+                    <td>
+                    {% if scorecard.speed_dribble == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.speed_dribble >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.speed_dribble >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.speed_dribble >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.speed_dribble >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Dribble Right Foot
+                    </th>
+                    <td>
+                    {% if scorecard.dribble_r == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.dribble_r >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.dribble_r >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.dribble_r >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.dribble_r >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Dribble Left Foot
+                    </th>
+                    <td>
+                    {% if scorecard.dribble_l == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.dribble_l >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.dribble_l >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.dribble_l >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.dribble_l >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Dribble 3-Cone
+                    </th>
+                    <td>
+                    {% if scorecard.dribble_3_cone == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.dribble_3_cone >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.dribble_3_cone >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.dribble_3_cone >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.dribble_3_cone >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr class="total">
+                  <th scope="row" colspan="2">Dribbling IQ: {{ scorecard.total_dribbling|floatformat:'0' }}</th>
+                </tr>
+              </tbody>
+          </table>
+
+          <h2>Control</h2>
+          <table class="table stats-table table-sm">
+              <thead>
+                <tr>
+                  <th scope="col"> </th>
+                  <th scope="col">
+                    1-5 stars (5 highest)
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <th scope="row">Thigh
+                    </th>
+                    <td>
+                    {% if scorecard.foot == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.foot >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.foot >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.foot >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.foot >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Foot
+                    </th>
+                    <td>
+                    {% if scorecard.thigh == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.thigh >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.thigh >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.thigh >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.thigh >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Taps
+                    </th>
+                    <td>
+                    {% if scorecard.taps == 1.0 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.taps >= 0.75 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.taps >= 0.5 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.taps >= 0.25 %}<i class="fa fa-star">{% endif %}
+                    {% if scorecard.taps >= 0 %}<i class="fa fa-star">{% endif %}
+                    </td>
+                </tr>
+            <tr class="total">
+              <th scope="row" colspan="2">Control IQ: {{ scorecard.total_control|floatformat:'0' }}</th>
+            </tr>
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+{% endblock content %}
+{% block custom_scripts %}
+  <script>
+    var data = {
+      "showcases": [{% for showcase in showcases %}
+          [
+            "{{ showcase.showcase_name }}",
+            {{ showcase.total_shooting|floatformat:'0' }},
+            {{ showcase.total_passing|floatformat:'0' }},
+            {{ showcase.total_dribbling|floatformat:'0' }},
+            {{ showcase.total_control|floatformat:'0' }},
+            {{ showcase.grand_total|floatformat:'0' }}
+            ],{% endfor %}
+          ],
+      "player_comp": [
+        "All Other players",
+        {{ player_comps.total_shooting__avg|floatformat:'0' }},
+        {{ player_comps.total_passing__avg|floatformat:'0' }},
+        {{ player_comps.total_dribbling__avg|floatformat:'0' }},
+        {{ player_comps.total_control__avg|floatformat:'0' }},
+        {{ player_comps.grand_total__avg|floatformat:'0' }}
+        ],
+      "club": [
+        "Club",
+        {{ player.team.club.total_shooting_avg|floatformat:'0' }},
+        {{ player.team.club.total_passing_avg|floatformat:'0' }},
+        {{ player.team.club.total_dribbling_avg|floatformat:'0' }},
+        {{ player.team.club.total_control_avg|floatformat:'0' }},
+        {{ player.team.club.grand_total_avg|floatformat:'0' }}
+        ],
+      "team": [
+        "Team",
+        {{ player.team.total_shooting_avg|floatformat:'0' }},
+        {{ player.team.total_passing_avg|floatformat:'0' }},
+        {{ player.team.total_dribbling_avg|floatformat:'0' }},
+        {{ player.team.total_control_avg|floatformat:'0' }},
+        {{ player.team.grand_total_avg|floatformat:'0' }}
+        ]
+    };
+    </script>
+    {% if scorecard %}
+    <script>
+    var chartOne = c3.generate({
+        data: {
+          columns: [
+            data.showcases[0],
+            data.showcases[1]
+          ],
+          type: "bar",
+          groups: [
+            ["data1", "data2"]
+          ],
+          labels: true,
+          selection: {
+            enabled: false
+          }
+        },
+        bar: {
+          width: {
+            ratio: 0.7
+          }
+        },
+        interaction: {
+          enabled: false
+        },
+        legend: {
+          item: {
+            onclick: function () { },
+            onmouseover: function () { }
+          }
+        },
+        grid: {
+          y: {
+            lines: [{ value: 0 }],
+
+          },
+          focus: {
+            show: false
+          }
+        },
+        bindto: "#chart-demo-1",
+        color: {
+          pattern: ["rgb(68, 170, 67)", "rgb(53, 80, 139)"]
+        },
+        axis: {
+          x: {
+            type: "category",
+            categories: ["Shooting IQ", "Passing IQ", "Dribbling IQ", "Control IQ", "Skill IQ"]
+          },
+          y: {
+            min: 0,
+            max: 100,
+            padding: { top: 0, bottom: 0 }
+          },
+          rotated: true
+        },
+        transition: {
+          duration: 500
+        }
+    });
+    </script>
+    {% endif %}
+    <script>
+    var chartTwo = c3.generate({
+        data: {
+          columns: [
+            data.showcases[0],
+            data.player_comp
+          ],
+          type: "bar",
+          groups: [
+            ["data1", "data2"]
+          ],
+          labels: true,
+          selection: {
+            enabled: false
+          }
+        },
+        bar: {
+          width: {
+            ratio: 0.7
+          }
+        },
+        interaction: {
+          enabled: false
+        },
+        legend: {
+          item: {
+            onclick: function () { },
+            onmouseover: function () { }
+          }
+        },
+        grid: {
+          y: {
+            lines: [{ value: 0 }],
+
+          },
+          focus: {
+            show: false
+          }
+        },
+        bindto: "#chart-demo-2",
+        color: {
+          pattern: ["rgb(68, 170, 67)", "rgb(53, 80, 139)"]
+        },
+        axis: {
+          x: {
+            type: "category",
+            categories: ["Shooting IQ", "Passing IQ", "Dribbling IQ", "Control IQ", "Skill IQ"]
+          },
+          y: {
+            min: 0,
+            max: 100,
+            padding: { top: 0, bottom: 0 }
+          },
+          rotated: true
+        },
+        transition: {
+          duration: 500
+        }
+    });
+  </script>
+  <script>
+  function playerChart(chart) {
+      var chartId;
+      var a;
+      if (chart === 1) {
+          chartId = chartOne;
+          a = "selection_1";
+      } else {
+          chartId = chartTwo;
+          a = "selection_2";
+      }
+      var b = document.getElementById(a).value;
+      var bar1 = data.showcases[0];
+      var bar2 = chart == 1 ? data.showcases[b] : data[b];
+      chartId.data.colors()[bar1[0]] = "rgb(68, 170, 67)";
+      chartId.data.colors()[bar2[0]] = "rgb(53, 80, 139)";
+      chartId.load({
+          unload:true,
+          columns: [
+              bar1,
+              bar2
+          ]
+      });
+  }
+  </script>
+  <script src="{% static "js/scripts.js" %}"></script>
+  <script src="{% static "js/bootstrap-sortable.js" %}"></script>
+  <script src="{% static "js/jquery.floatThead.min.js" %}"></script>
+{% endblock custom_scripts %}

@@ -2,8 +2,9 @@ env
 .DS_Store
 *.pyc
 *.pyo
-*/static
-*/media
-*/site_config.json
+static
+media
+.envrc
+site_config.json
 __pycache__/
 *__init__.py

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  {% load wagtailuserbar %}
+    <head>
+        <meta charset="utf-8" />
+        <title>
+            {% block title %}
+                {% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}
+            {% endblock %}
+            {% block title_suffix %}
+                {% with self.get_site.site_name as site_name %}
+                    {% if site_name %}- {{ site_name }}{% endif %}
+                {% endwith %}
+            {% endblock %}
+        </title>        
+        {% load static %}
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <meta name="Description" content="SportTech IQ features informative, data-driven analysis on youth players.">
+        <meta name="Keywords" content="Soccer Futbol Sports Analytics">
+        <link rel="shortcut icon" href="{% static "img/favicon.ico" %}" type="image/x-icon">
+        {% if debug %}
+        <meta name="robots" content="noindex" />
+        {% else %}
+        <meta name="google-site-verification" content="0Y0RzRJGk8jWfN97RzGL-0n1h5wHgcoFgmWyprEie9w" />
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-NWRRTZW');</script>
+        <!-- End Google Tag Manager -->
+        {% endif %}
+
+        <!-- Required libraries -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:400,600&amp;subset=latin-ext">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+        <link rel="stylesheet" href="{% static "css/bootstrap-sortable.css" %}">
+        <link rel="stylesheet" href="{% static "css/styles.css" %}">
+        <script src="{% static "js/jquery.min.js" %}"></script>
+
+        {% block headscript %}
+        {% endblock headscript %}
+
+        {% block custom_styles %}
+            {# Override this in templates to add extra stylesheets #}
+        {% endblock custom_styles %}
+    </head>
+
+    <body class="{% block body_class %}{% endblock %} mt-5" id="top" data-spy="scroll" data-target="#top-menu">
+        {% wagtailuserbar %}
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NWRRTZW"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+        <div>
+
+        <!--NAVIGATION BAR-->
+        <nav class="navbar navbar-expand-lg bg-primary navbar-dark fixed-top py-0 px-4" id="top-menu">
+          <a href="/" title="SportTechIQ">
+            <span class="navbar-brand ml-lg-3 ml-md-2"><img src="{% static "img/menu_logo.png" %}"></span> 
+          </a>
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarToggler">
+            <ul class="main-menu navbar-nav mx-auto">
+              {% if user.is_authenticated %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle js-scroll-trigger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{ user.get_username }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{% url 'logout'%}?next=/">logout</a>
+                </div>
+
+              </li>{% else %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'signup' %}">signup</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login' %}?next={{request.path}}">login</a>
+              </li>{% endif %}
+              <li class="nav-item">
+                <a class="nav-link" href="/format">skill challenge format</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/player-stats">player example</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/club-stats">club example</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/#about-us">about</a>
+              </li>
+          
+            </ul>
+            <span class="navbar-text">
+              <span class="navbar-date" id="insert-date"></span>
+            </span>
+          </div>
+        </nav>
+
+        {% block content %}{% endblock %}
+
+        <!--Footer-->
+        <footer class="bg-primary">
+
+            <!--SECONDARY NAVIGATION-->
+            <div class="container">
+                <nav>
+                  <ul class="nav navbar flex-column flex-md-row">
+                    <li class="nav-item">
+                      <a class="nav-link" href="/faq">FAQ</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/privacy-policy">Privacy Policy</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/terms-of-use">Terms of Use</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/partners">Partners</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/career">Careers</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                  </ul>
+                </nav>
+            </div>
+            <div class="copyright col-12 py-2 text-center">© 2018 Sport Tech IQ. All Rights Reserved.</div>
+        </footer>
+
+        </div>
+
+        <script>
+        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"
+        ];
+        var d = new Date()
+        var new_date = monthNames[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
+        document.getElementById("insert-date").innerHTML = new_date;
+        </script>
+
+        <!--SMOOTH SCROLL TO ANCHOR LINKS-->
+        <script>
+        $(document).on("click", 'a[href^="#"]', function (event) {
+        event.preventDefault();
+        var href = $.attr(this, 'href');
+        $("html, body").animate({
+        scrollTop: $(href).offset().top
+        }, 550, function () {
+        window.location.hash = href;
+        });
+        });
+        </script>
+
+        {# Global javascript #}
+        <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
+
+        {% block custom_scripts %}
+            {# Override this in templates to add extra javascript #}
+        {% endblock custom_scripts %}
+    </body>
+</html>
