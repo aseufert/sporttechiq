@@ -24,7 +24,6 @@ with open(site_config) as f:
     configs = json.loads(f.read())
 
 SECRET_KEY = configs['SECRET_KEY']
-os.environ['DJANGO_SETTINGS_MODULE'] = configs['SETTINGS']
 
 
 # Application definition
