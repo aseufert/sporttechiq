@@ -71,7 +71,10 @@ MAIL_USE_SSL = False
 BASE_URL = 'https://staging.sporttechiq.com/'
 
 # Add debug toolbar here
-# INSTALLED_APPS += 
+INSTALLED_APPS += [
+    'debug_toolbar'
+    ]
+
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sporttech.settings.staging")
 
