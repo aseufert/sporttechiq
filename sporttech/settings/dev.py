@@ -46,8 +46,6 @@ STATICFILES_STORAGE = 'sporttech.settings.storage_backends.StaticStorage'
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'http://localhost:8000/'
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sporttech.settings.dev")
-
 INSTALLED_APPS += [
     'debug_toolbar'
 ]
