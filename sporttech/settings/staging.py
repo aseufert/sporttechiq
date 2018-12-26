@@ -13,6 +13,11 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
 AWS_LOCATION = 'static'
+# Set this 12/26/18 based on this SO
+# https://stackoverflow.com/questions/6618013/django-staticfiles-and-amazon-s3-how-to-detect-modified-files?rq=1
+# Need to test and put into production
+AWS_PRELOAD_METADATA = True
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'sporttech/static'),
@@ -70,15 +75,14 @@ MAIL_USE_SSL = False
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'https://staging.sporttechiq.com/'
 
-INSTALLED_APPS += [
-    'debug_toolbar'
-]
+#uncomment when you figured out the static files issue
+# INSTALLED_APPS += [
+#     'debug_toolbar'
+# ]
 
-MIDDLEWARE += [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-]
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sporttech.settings.staging")
+# MIDDLEWARE += [
+#     'debug_toolbar.middleware.DebugToolbarMiddleware',
+# ]
 
 try:
     from .local import *

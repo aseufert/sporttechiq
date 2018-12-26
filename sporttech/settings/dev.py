@@ -46,13 +46,13 @@ STATICFILES_STORAGE = 'sporttech.settings.storage_backends.StaticStorage'
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'http://localhost:8000/'
 
-INSTALLED_APPS += [
-    'debug_toolbar'
-]
+# INSTALLED_APPS += [
+#     'debug_toolbar'
+# ]
 
-MIDDLEWARE += [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-]
+# MIDDLEWARE += [
+#     'debug_toolbar.middleware.DebugToolbarMiddleware',
+# ]
 
 try:
     from .local import *

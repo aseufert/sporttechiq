@@ -1,6 +1,8 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.generic import TemplateView
+from django.conf import settings
+from django.urls import path, include
 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
@@ -31,3 +33,11 @@ urlpatterns = [
 ]
 
 admin.site.site_header = 'SportTech IQ Admin Page'
+
+# uncomment when you've figured out the static files issue
+# if settings.DEBUG:
+#     import debug_toolbar
+
+#     urlpatterns += [
+#         path('__debug__/', include(debug_toolbar.urls)),
+#     ]
