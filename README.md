@@ -8,3 +8,4 @@ Instructions
 - Python venv
 
 Run migrate
+-Remember to delete old migrations
