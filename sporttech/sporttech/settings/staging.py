@@ -15,7 +15,7 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_LOCATION = 'static'
 
 STATICFILES_DIRS = [
-    os.path.join(base.BASE_DIR, 'sporttech/static'),
+    os.path.join(BASE_DIR, 'sporttech/static'),
 ]
 
 CLOUD_FRONT_CUSTOM_DOMAIN = 'd1kpiwu2hgqz6c.cloudfront.net'
