@@ -48,8 +48,13 @@ BASE_URL = 'http://localhost:8000/'
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sporttech.settings.dev")
 
-# Add debug toolbar here
-# INSTALLED_APPS += 
+INSTALLED_APPS += [
+    'debug_toolbar'
+]
+
+MIDDLEWARE += [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
 
 try:
     from .local import *

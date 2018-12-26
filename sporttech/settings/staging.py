@@ -70,11 +70,13 @@ MAIL_USE_SSL = False
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'https://staging.sporttechiq.com/'
 
-# Add debug toolbar here
 INSTALLED_APPS += [
     'debug_toolbar'
-    ]
+]
 
+MIDDLEWARE += [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sporttech.settings.staging")
 
