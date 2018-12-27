@@ -62,8 +62,3 @@ SERVER_EMAIL = 'noreply@sporttechiq.com'
 BASE_URL = 'https://www.sporttechiq.com'
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sporttech.settings.production")
-
-try:
-    from .local import *
-except ImportError:
-    pass

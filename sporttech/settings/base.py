@@ -138,7 +138,6 @@ USE_L10N = True
 USE_TZ = True
 
 # Wagtail settings
-
 WAGTAIL_SITE_NAME = "SportTech IQ"
 
 
