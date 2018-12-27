@@ -19,8 +19,6 @@ urlpatterns = [
 
     url(r'^player-stats', TemplateView.as_view(template_name='player_stats.html'), name='player_stats'),
     url(r'^club-stats', TemplateView.as_view(template_name='club_stats.html'), name='club_stats'),
-    url(r'^media-info', TemplateView.as_view(template_name='media.html'), name='media'),
-    url(r'^fan', TemplateView.as_view(template_name='fan.html'), name='fan'),
     url(r'^format', home_views.format, name='format'),
 
     # WAGTAIL
