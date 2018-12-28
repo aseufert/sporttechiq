@@ -12,7 +12,7 @@ import os
 import json
 
 FILE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-site_config = os.path.join(FILE_DIR, 'settings', 'site_config.json')
+site_config = os.path.join(FILE_DIR, 'sporttech', 'settings', 'site_config.json')
 
 with open(site_config) as f:
     configs = json.loads(f.read())

@@ -9,3 +9,4 @@ site_config.json
 __pycache__/
 *__init__.py
 db.sqlite3
+*initial_db.json
