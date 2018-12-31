@@ -9,22 +9,14 @@ ALLOWED_HOSTS = [
     'www.sporttechiq.com',
 ]
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': "prod_postgres",
-#         'USER': "amseufert",
-#         'PASSWORD': "5BF-9SJ-Bos-76y",
-#         'HOST': 'Wf-148-72-160-136.webfaction.com',
-#         'PORT': '5432',
-#     }
-# }
-
-# Will change after testing
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': "prod_postgres",
+        'USER': "amseufert",
+        'PASSWORD': "5BF-9SJ-Bos-76y",
+        'HOST': 'Wf-148-72-160-136.webfaction.com',
+        'PORT': '5432',
     }
 }
 
