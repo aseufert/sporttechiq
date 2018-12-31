@@ -20,7 +20,7 @@ ALLOWED_HOSTS = [
 #     }
 # }
 
-
+# Will change after testing
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
