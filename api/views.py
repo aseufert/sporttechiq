@@ -1,4 +1,15 @@
+from rest_framework import generics
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from django_filters.rest_framework import DjangoFilterBackend
+from django.shortcuts import get_object_or_404, get_list_or_404
+from django.http import Http404
+
 from api import serializers
+from api import permissions as api_permissions
 from showcase.models import (
     Player,
     Club,
@@ -11,18 +22,6 @@ from showcase.models import (
     FieldLayout
     )
 from users.models import User
-from api import permissions as api_permissions
-
-from rest_framework import generics
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-
-from django_filters.rest_framework import DjangoFilterBackend
-from django.shortcuts import get_object_or_404, get_list_or_404
-from django.http import Http404
-
 
 class PlayerList(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated, api_permissions.IsCoachDirectorOrReadOnly)
@@ -72,7 +71,7 @@ class ShowcaseDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class PlayerScorecardList(generics.ListCreateAPIView):
-    # TODO: Add more advanced filtering options. e.g. heigh__gt=65
+    # TODO: Add more advanced filtering options. e.g. height__gt=65
     permission_classes = (IsAuthenticated, api_permissions.IsCoachDirectorOrReadOnly)
     serializer_class = serializers.PlayerScorecardSerializer
     filter_backends = (DjangoFilterBackend,)
@@ -166,6 +165,11 @@ class PlayerScorecardList(generics.ListCreateAPIView):
             return queryset
         else:
             raise Http404
+
+class PlayerScorecardDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated, api_permissions.IsCoachDirectorOrReadOnly)
+    serializer_class = serializers.PlayerScorecardSerializer
+    queryset = PlayerScorecard.objects.all()
 
 
 class TeamList(generics.ListCreateAPIView):
