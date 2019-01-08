@@ -424,6 +424,13 @@ class Station(models.Model):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+    webm_animation = models.ForeignKey(
+        'wagtaildocs.Document',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
 
     panels = [
         FieldPanel('name'),
@@ -433,13 +440,13 @@ class Station(models.Model):
         DocumentChooserPanel('diagram'),
         DocumentChooserPanel('scorecard_diagram'),
         DocumentChooserPanel('animation'),
+        DocumentChooserPanel('webm_animation'),
     ]
 
     def __str__(self):
         return self.name
 
 
-# @register_snippet
 class FieldLayout(models.Model):
     name = models.CharField(max_length=100, help_text='Enter the field layout name here')
     image = models.ForeignKey(
