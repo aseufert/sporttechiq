@@ -1,10 +1,21 @@
-from showcase.models import Player, Showcase, Club, Team, Coach, Director, PlayerScorecard, Station, FieldLayout
-from users.models import User
-
 from wagtail.documents.models import Document
 from wagtail.images.models import Image
 
 from rest_framework import serializers
+
+from showcase.models import (
+    Player,
+    Showcase,
+    Club,
+    Team,
+    Coach,
+    Director,
+    PlayerScorecard,
+    Station,
+    FieldLayout,
+    ScoringCriteria
+)
+from users.models import User
 
 
 class PlayerSerializer(serializers.ModelSerializer):
@@ -107,14 +118,34 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = ('title', 'file')
 
 
+class ScoringCriteriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ScoringCriteria
+        fields = '__all__'
+
+
 class StationSerializer(serializers.ModelSerializer):
     image = ImageSerializer()
     diagram = DocumentSerializer()
     scorecard_diagram = DocumentSerializer()
+    # scoring_criteria = ScoringCriteriaSerializer(many=True)
 
     class Meta:
         model = Station
-        fields = ('name', 'index', 'description', 'image', 'diagram', 'scorecard_diagram')
+        depth = 1
+        fields = (
+            'name',
+            'index',
+            'description',
+            'scoring_criteria',
+            'weight',
+            'group',
+            'image',
+            'diagram',
+            'scorecard_diagram',
+            'animation',
+            'webm_animation'
+        )
 
 
 class FieldLayoutSerializer(serializers.ModelSerializer):

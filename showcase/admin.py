@@ -2,12 +2,31 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
 
-from .models import Player, PlayerScorecard, Showcase, Club, Team, Director, Coach
+from .models import (
+    Player,
+    PlayerScorecard,
+    Showcase,
+    Club,
+    Team,
+    Director,
+    Coach,
+    Station,
+    FieldLayout,
+    ScoringCriteria
+)
 
 
 admin.site.register(Showcase)
 admin.site.register(Director)
 admin.site.register(Coach)
+admin.site.register(FieldLayout)
+admin.site.register(ScoringCriteria)
+
+
+@admin.register(Station)
+class StationAdmin(admin.ModelAdmin):
+    model = Station
+    filter_horizontal = ('scoring_criteria',)
 
 
 @admin.register(PlayerScorecard)
