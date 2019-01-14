@@ -280,15 +280,11 @@ class UserProfile(APIView):
 
 class StationList(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
-    queryset = Station.objects.all()\
-        .order_by('index')\
-        .select_related('image')\
-        .select_related('diagram')\
-        .select_related('scorecard_diagram')
+    queryset = Station.objects.all().order_by('index')
     serializer_class = serializers.StationSerializer
 
 
 class FieldLayoutList(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
-    queryset = FieldLayout.objects.all().select_related('image').select_related('diagram')
+    queryset = FieldLayout.objects.all()
     serializer_class = serializers.FieldLayoutSerializer

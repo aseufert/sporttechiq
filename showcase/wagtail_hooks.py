@@ -16,17 +16,17 @@ class PlayerModelAdmin(ModelAdmin):
     # search_fields = ('title',)
 
 
-class StationModelAdmin(ModelAdmin):
-    model = Station
+# class StationModelAdmin(ModelAdmin):
+#     model = Station
 
 
-class FieldLayoutModelAdmin(ModelAdmin):
-    model = FieldLayout
+# class FieldLayoutModelAdmin(ModelAdmin):
+#     model = FieldLayout
 
 
 # Uncommented to show in Wagtail admin. No foreign relations
 # makes it less than ideal for data entry. Need to figure out way
 
 # modeladmin_register(PlayerModelAdmin)
-modeladmin_register(StationModelAdmin)
-modeladmin_register(FieldLayoutModelAdmin)
+# modeladmin_register(StationModelAdmin)
+# modeladmin_register(FieldLayoutModelAdmin)

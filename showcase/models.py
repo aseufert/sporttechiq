@@ -2,13 +2,11 @@ import uuid
 from math import ceil
 
 from django.db import models
-from django import forms
 from django.contrib.auth.models import AbstractUser
 
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.documents.edit_handlers import DocumentChooserPanel
-# from wagtail.snippets.models import register_snippet
 
 from users.models import User
 from showcase import file_size_validator
@@ -420,6 +418,7 @@ class Station(models.Model):
     )
 
     name = models.CharField(max_length=100, help_text='Enter the station name here')
+    scorecard_name = models.CharField(max_length=100, help_text='Name matching scorecard field', blank=True)
     index = models.SmallIntegerField(
         null=True,
         choices=index_choices,
@@ -430,58 +429,39 @@ class Station(models.Model):
         'ScoringCriteria',
         related_name='stations',
         help_text='Add as many scoring criteria as apply'
-        )
+    )
     weight = models.FloatField(default=0.0)
     group = models.CharField(choices=group_choices, null=True, max_length=30)
-    image = models.ForeignKey(
-        'wagtailimages.Image',
+    image = models.ImageField(
+        upload_to='stations',
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
+        validators=[file_size_validator.file_size]
     )
-    diagram = models.ForeignKey(
-        'wagtaildocs.Document',
+    diagram = models.FileField(
+        upload_to='stations',
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
+        validators=[file_size_validator.file_size]
     )
-    scorecard_diagram = models.ForeignKey(
-        'wagtaildocs.Document',
+    scorecard_diagram = models.FileField(
+        upload_to='stations',
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
+        validators=[file_size_validator.file_size]
     )
-    animation = models.ForeignKey(
-        'wagtaildocs.Document',
+    animation = models.FileField(
+        upload_to='stations',
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
+        validators=[file_size_validator.file_size]
     )
-    webm_animation = models.ForeignKey(
-        'wagtaildocs.Document',
+    webm_animation = models.FileField(
+        upload_to='stations',
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
+        validators=[file_size_validator.file_size]
     )
-
-    panels = [
-        FieldPanel('name'),
-        FieldPanel('index'),
-        FieldPanel('description'),
-        FieldPanel('scoring_criteria'),
-        FieldPanel('weight'),
-        FieldPanel('group'),
-        ImageChooserPanel('image'),
-        DocumentChooserPanel('diagram'),
-        DocumentChooserPanel('scorecard_diagram'),
-        DocumentChooserPanel('animation'),
-        DocumentChooserPanel('webm_animation'),
-    ]
 
     def __str__(self):
         return self.name
@@ -511,29 +491,21 @@ class FieldLayout(models.Model):
     Field layout models for scorecards
     '''
     name = models.CharField(max_length=100, help_text='Enter the field layout name here')
-    image = models.ForeignKey(
-        'wagtailimages.Image',
+    image = models.ImageField(
+        upload_to='field-layouts',
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
+        validators=[file_size_validator.file_size]
     )
-    diagram = models.ForeignKey(
-        'wagtaildocs.Document',
+    diagram = models.FileField(
+        upload_to='field-layouts',
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
+        validators=[file_size_validator.file_size]
     )
-
-    panels = [
-        FieldPanel('name'),
-        ImageChooserPanel('image'),
-        DocumentChooserPanel('diagram'),
-    ]
 
     def __str__(self):
         return self.name
 
-# Make Email Field required apparently
+# Make email field required apparently. Need for abstract user class
 AbstractUser._meta.get_field('email').blank = False

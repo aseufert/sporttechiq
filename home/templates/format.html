@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% load static %}
-{% load wagtailimages_tags %}
 
 {% block content %}
 	 <section class="container pt-2 mt-5 stretching-block">
@@ -82,23 +81,25 @@
 
           <h3 class="mt-5 mb-3">Diagrams, Animations & Scorecards</h3>
 
-          <!-- field layouts -->
+          <!-- stations -->
           {% for station in stations %}
           <div class="mt-5">
             <span id="{{ station.name|cut:" " }}" class="anchor"></span>
-            {% image station.image original class="img-fluid key-feature-image" alt="{{ station name }}" %}
+            {% if station.image %}
+              <img src="{{ station.image.url }}" class="img-fluid key-feature-image" alt="{{ station.name }}" />
+            {% endif %}
             <div class="row mt-3 justify-content-between">
               <a href="#top">
                 <i class="fa fa-long-arrow-up"></i> Go to top</a>
               <span>
-                <a href="{{ station.diagram.file.url }}" target="_blank" class="btn btn-primary btn-sm">Diagram
+                <a href="{{ station.diagram }}" target="_blank" class="btn btn-primary btn-sm">Diagram
                   <i class="fa fa-print"></i>
                 </a>
-                <a href="{{ station.scorecard_diagram.file.url }}" target="_blank" class="btn btn-primary btn-sm">
+                <a href="{{ station.scorecard_diagram }}" target="_blank" class="btn btn-primary btn-sm">
                   Scorecard <i class="fa fa-file-pdf-o"></i>
                 </a>
                 {% if station.animation %}
-                  <button class="btn btn-primary btn-sm btn-animation" data-animation-file-name="{{ station.animation|cut:" " }}" data-animation-title="{{ station.animation }}" data-file-location="{{ station.animation.file.url }}">See animation <i class="fa fa-play-circle-o"></i>
+                  <button class="btn btn-primary btn-sm btn-animation" data-animation-file-name="{{ station.animation|cut:" " }}" data-animation-title="{{ station.animation }}" data-file-location="{{ station.animation }}">See animation <i class="fa fa-play-circle-o"></i>
                   </button>
                 {% endif %}
               </span>
@@ -108,14 +109,17 @@
 
           <!-- field layouts -->
           {% for field_layout in field_layouts %}
+          <p>field layouts</p>
           <div class="mt-5">
               <span id="{{ field_layout.name|cut:" " }}" class="anchor"></span>
-              {% image field_layout.image original class="img-fluid key-feature-image" %}
+              {% if field_layout.image %}
+                <img src="{{ field_layout.image.url }}" class="img-fluid key-feature-image" alt="{{ station.name }}" />
+              {% endif %}
               <div class="row mt-3 justify-content-between">
                 <a href="#top">
                   <i class="fa fa-long-arrow-up"></i> Go to top</a>
                 <span>
-                  <a href="{{ field_layout.diagram.file.url }}" target="_blank" class="btn btn-primary btn-sm">Print
+                  <a href="{{ field_layout.diagram }}" target="_blank" class="btn btn-primary btn-sm">Print
                     <i class="fa fa-print"></i>
                   </a>
                 </span>

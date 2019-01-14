@@ -1,14 +1,10 @@
-
 from django.core.mail import send_mail, BadHeaderError
 from django.shortcuts import render, redirect, HttpResponse
-
-from .forms import ContactForm
-
 from showcase.models import Station, FieldLayout
+from .forms import ContactForm
 
 
 def contact(request):
-
     if request.method == 'GET':
         form = ContactForm()
         print('request get')
@@ -23,7 +19,12 @@ def contact(request):
             mail_msg = "Contact page message sent by {}\n\n{}".format(from_email, message)
 
             try:
-                send_mail(subject, mail_msg, 'noreply@sporttechiq.com', ['amseufert@gmail.com', 'brian.moure1@gmail.com'])
+                send_mail(
+                    subject,
+                    mail_msg,
+                    'noreply@sporttechiq.com',
+                    ['amseufert@gmail.com', 'brian.moure1@gmail.com']
+                )
 
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
@@ -49,7 +50,7 @@ def format(request):
     stations = Station.objects.all().order_by('index')
     field_layouts = FieldLayout.objects.all()
 
-    return render(request, 'format.html', context = {
-            'stations': stations,
-            'field_layouts': field_layouts,
-        })
+    return render(request, 'format.html', context={
+        'stations': stations,
+        'field_layouts': field_layouts,
+    })
