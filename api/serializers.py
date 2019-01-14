@@ -85,6 +85,7 @@ class StationSerializer(serializers.ModelSerializer):
         depth = 1
         fields = (
             'name',
+            'scorecard_name',
             'index',
             'description',
             'scoring_criteria',

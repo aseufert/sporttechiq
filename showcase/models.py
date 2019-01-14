@@ -4,10 +4,6 @@ from math import ceil
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-from wagtail.admin.edit_handlers import FieldPanel
-from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtail.documents.edit_handlers import DocumentChooserPanel
-
 from users.models import User
 from showcase import file_size_validator
 import showcase.dropdowns as choices
@@ -409,7 +405,7 @@ class Station(models.Model):
     '''
     Station model
     '''
-    index_choices = tuple((i, i) for i in range(1, 20, 1))
+    index_choices = tuple((i, i) for i in range(1, 40, 1))
     group_choices = (
         ('Shooting', 'Shooting'),
         ('Dribbling', 'Dribbling'),
@@ -418,9 +414,14 @@ class Station(models.Model):
     )
 
     name = models.CharField(max_length=100, help_text='Enter the station name here')
-    scorecard_name = models.CharField(max_length=100, help_text='Name matching scorecard field', blank=True)
+    scorecard_name = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text='Name matching scorecard field')
+    display = models.BooleanField(default=False, help_text='Determines if station is displayed on format page')
     index = models.SmallIntegerField(
         null=True,
+        blank=True,
         choices=index_choices,
         help_text='Used to order stations in showcase'
     )
