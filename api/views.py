@@ -23,6 +23,7 @@ from showcase.models import (
     )
 from users.models import User
 
+
 class PlayerList(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated, api_permissions.IsCoachDirectorOrReadOnly)
     serializer_class = serializers.PlayerSerializer
@@ -71,9 +72,14 @@ class ShowcaseDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class PlayerScorecardList(generics.ListCreateAPIView):
-    # TODO: Add more advanced filtering options. e.g. height__gt=65
+    '''
+    Player Scorecard Serializer class
+    Get has read only, nested serializer
+    Post has unnested serializer
+
+    TODO: Add more advanced filtering options. e.g. height__gt=65
+    '''
     permission_classes = (IsAuthenticated, api_permissions.IsCoachDirectorOrReadOnly)
-    serializer_class = serializers.PlayerScorecardSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
         'id',
@@ -136,6 +142,18 @@ class PlayerScorecardList(generics.ListCreateAPIView):
         'grand_total',
     )
 
+    def get_serializer_class(self):
+         # Define your HTTP method-to-serializer mapping freely.
+         # This also works with CoreAPI and Swagger documentation,
+         # which produces clean and readable API documentation,
+         # so I have chosen to believe this is the way the
+         # Django REST Framework author intended things to work:
+         if self.request.method in ['POST']:
+             # Since the ReadSerializer does nested lookups
+             # in multiple tables, only use it when necessary
+             return serializers.PlayerScorecardCreateSerializer
+         return serializers.PlayerScorecardSerializer
+
     def get_queryset(self):
         queryset = PlayerScorecard.objects.all().select_related('player').select_related('showcase')
         gender = self.request.query_params.get('gender', None)
@@ -168,8 +186,20 @@ class PlayerScorecardList(generics.ListCreateAPIView):
 
 class PlayerScorecardDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated, api_permissions.IsCoachDirectorOrReadOnly)
-    serializer_class = serializers.PlayerScorecardSerializer
+    # serializer_class = serializers.PlayerScorecardSerializer
     queryset = PlayerScorecard.objects.all()
+
+    def get_serializer_class(self):
+         # Define your HTTP method-to-serializer mapping freely.
+         # This also works with CoreAPI and Swagger documentation,
+         # which produces clean and readable API documentation,
+         # so I have chosen to believe this is the way the
+         # Django REST Framework author intended things to work:
+         if self.request.method in ['PUT', 'PATCH']:
+             # Since the ReadSerializer does nested lookups
+             # in multiple tables, only use it when necessary
+             return serializers.PlayerScorecardCreateSerializer
+         return serializers.PlayerScorecardSerializer
 
 
 class TeamList(generics.ListCreateAPIView):

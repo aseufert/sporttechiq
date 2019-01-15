@@ -123,13 +123,23 @@ class FieldLayoutSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'image', 'diagram')
 
 
+class PlayerScorecardCreateSerializer(serializers.ModelSerializer):
+    '''
+    Used to create scorecards via Post requests
+    '''
+    class Meta:
+        model = PlayerScorecard
+        fields = '__all__'
+
+
 class PlayerScorecardSerializer(serializers.ModelSerializer):
-    player = PlayerSerializer()
-    showcase = ShowcaseSerializer()
+    player = PlayerSerializer(read_only=True)
+    showcase = ShowcaseSerializer(read_only=True)
 
     class Meta:
         model = PlayerScorecard
         fields = (
+            'id',
             'player',
             'showcase',
             'height',
