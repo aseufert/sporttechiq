@@ -26,6 +26,7 @@ admin.site.register(ScoringCriteria)
 @admin.register(Station)
 class StationAdmin(admin.ModelAdmin):
     model = Station
+    list_display = ('name', 'index', 'weight', 'group')
     filter_horizontal = ('scoring_criteria',)
 
 

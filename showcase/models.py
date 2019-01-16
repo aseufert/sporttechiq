@@ -175,6 +175,8 @@ class PlayerScorecard(models.Model):
         calc = (
             self.long_r_1 * 4.5 +
             self.long_r_2 * 4.5 +
+            self.long_l_1 * 4.5 +
+            self.long_l_2 * 4.5 +
             self.cross_r_1 * 4.5 +
             self.cross_r_2 * 4.5 +
             self.cross_l_1 * 4.5 +
@@ -405,7 +407,7 @@ class Station(models.Model):
     '''
     Station model
     '''
-    index_choices = tuple((i, i) for i in range(1, 40, 1))
+    index_choices = tuple((i, i) for i in range(1, 60, 1))
     group_choices = (
         ('Shooting', 'Shooting'),
         ('Dribbling', 'Dribbling'),
@@ -466,6 +468,9 @@ class Station(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ('index',)
 
 
 class ScoringCriteria(models.Model):
