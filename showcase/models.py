@@ -456,14 +456,12 @@ class Station(models.Model):
     animation = models.FileField(
         upload_to='stations',
         null=True,
-        blank=True,
-        validators=[file_size_validator.file_size]
+        blank=True
     )
     webm_animation = models.FileField(
         upload_to='stations',
         null=True,
-        blank=True,
-        validators=[file_size_validator.file_size]
+        blank=True
     )
 
     def __str__(self):
