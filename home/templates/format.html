@@ -97,14 +97,18 @@
               <a href="#top">
                 <i class="fa fa-long-arrow-up"></i> Go to top</a>
               <span>
-                <a href="{{ station.diagram }}" target="_blank" class="btn btn-primary btn-sm">Diagram
+                {% if station.diagram %}
+                <a href="{{ station.diagram.url }}" target="_blank" class="btn btn-primary btn-sm">Diagram
                   <i class="fa fa-print"></i>
                 </a>
-                <a href="{{ station.scorecard_diagram }}" target="_blank" class="btn btn-primary btn-sm">
+                {% endif %}
+                {% if station.scorecard_diagram %}
+                <a href="{{ station.scorecard_diagram.url }}" target="_blank" class="btn btn-primary btn-sm">
                   Scorecard <i class="fa fa-file-pdf-o"></i>
                 </a>
+                {% endif %}
                 {% if station.animation %}
-                  <button class="btn btn-primary btn-sm btn-animation" data-animation-file-name="{{ station.animation|cut:" " }}" data-animation-title="{{ station.animation }}" data-file-location="{{ station.animation }}">See animation <i class="fa fa-play-circle-o"></i>
+                  <button class="btn btn-primary btn-sm btn-animation" data-animation-file-name="{{ station.scorecard_name }}" data-animation-title="{{ station.scorecard_name }}" data-file-location="{{ station.animation.url }}">See animation <i class="fa fa-play-circle-o"></i>
                   </button>
                 {% endif %}
               </span>
