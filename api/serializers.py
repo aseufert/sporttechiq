@@ -85,6 +85,7 @@ class StationSerializer(serializers.ModelSerializer):
         depth = 1
         fields = (
             'name',
+            'attempts',
             'scorecard_name',
             'index',
             'description',
@@ -100,18 +101,10 @@ class StationSerializer(serializers.ModelSerializer):
 
 
 class ShowcaseSerializer(serializers.ModelSerializer):
-    # stations = StationSerializer()
 
     class Meta:
         model = Showcase
-        fields = (
-            'id',
-            'showcase_name',
-            'showcase_date',
-            'showcase_location',
-            'weather',
-            'field_condition',
-        )
+        fields = '__all__'
 
 
 class FieldLayoutSerializer(serializers.ModelSerializer):

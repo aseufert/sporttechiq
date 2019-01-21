@@ -3,6 +3,7 @@ from math import ceil
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.fields import ArrayField
 
 from users.models import User
 from showcase import file_size_validator
@@ -11,6 +12,7 @@ import showcase.dropdowns as choices
 class Player(models.Model):
     first_name = models.CharField(max_length=100, help_text='First Name')
     last_name = models.CharField(max_length=100, help_text='Last Name')
+    player_number = models.SmallIntegerField(null=True, default=None)
     slug = models.SlugField(unique=True, max_length=255)
     user = models.OneToOneField(
         User,
@@ -93,7 +95,6 @@ class PlayerScorecard(models.Model):
     body_fat = models.SmallIntegerField(null=True, default=None, verbose_name='Body Fat Percentage')
     pulse = models.SmallIntegerField(null=True, default=None)
     oxygen = models.SmallIntegerField(null=True, default=None)
-    player_number = models.SmallIntegerField(null=True, default=None)
     '''control'''
     control_thigh = models.FloatField(choices=star, help_text='Select an option. Weight: 33.33', default=0.0, verbose_name='Thigh Control')
     control_foot = models.FloatField(choices=star, help_text='Select an option. Weight: 33.33', default=0.0, verbose_name='Foot Control')
@@ -252,8 +253,8 @@ class Showcase(models.Model):
     showcase_name = models.CharField(max_length=100)
     showcase_date = models.DateField()
     showcase_location = models.CharField(max_length=100, null=True, blank=True)
-    weather = models.CharField(max_length=100, null=True, blank=True)
-    field_condition = models.CharField(max_length=100, null=True, blank=True)
+    rain = models.BooleanField(default=False)
+    grass_field = models.BooleanField(default=False)
 
     def __str__(self):
         return self.showcase_name
@@ -416,10 +417,7 @@ class Station(models.Model):
     )
 
     name = models.CharField(max_length=100, help_text='Enter the station name here')
-    scorecard_name = models.CharField(
-        max_length=100,
-        blank=True,
-        help_text='Name matching scorecard field')
+    attempts = ArrayField(models.CharField(max_length=100), null=True, blank=True, help_text='Array of associated field names')
     display = models.BooleanField(default=False, help_text='Determines if station is displayed on format page')
     index = models.SmallIntegerField(
         null=True,
