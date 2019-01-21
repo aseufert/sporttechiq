@@ -86,7 +86,6 @@ class StationSerializer(serializers.ModelSerializer):
         fields = (
             'name',
             'attempts',
-            'scorecard_name',
             'index',
             'description',
             'scoring_criteria',
