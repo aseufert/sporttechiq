@@ -90,7 +90,6 @@ class PlayerScorecardList(generics.ListCreateAPIView):
         'body_fat',
         'pulse',
         'oxygen',
-        'player_number',
         'control_thigh',
         'control_foot',
         'foot_tap',
