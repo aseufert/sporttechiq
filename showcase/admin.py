@@ -45,8 +45,7 @@ class ShowcaseScorecardAdmin(admin.ModelAdmin):
                     'muscle',
                     'body_fat',
                     'pulse',
-                    'oxygen',
-                    'player_number'
+                    'oxygen'
                     )
                 }),
             ('Control', {
