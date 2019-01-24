@@ -48,10 +48,6 @@ def svgGenerator(player_data):
             if player_data.photo:
                 soup.find(id='player_headshot').attrs['xlink:href'] = getImageBase64(player_data.photo.url)
 
-            for scorecard in scorecards:
-                print(scorecard.showcase.showcase_date)
-                print(scorecard.total_shooting)
-
             soup.find(id='skill_iq_latest').string = '{:.0f}'.format(averages['grand_total__avg'])
             soup.find(id='player_name').string = player_name
             soup.find(id='player_birth_year').string = '{}'.format(player_data.birth_year)
@@ -59,51 +55,52 @@ def svgGenerator(player_data):
             soup.find(id='player_nation').string = player_data.country
             soup.find(id='player_city').string = player_data.city
 
-            soup.find(id='ch1_month').string = scorecards[4].showcase.showcase_date.strftime('%b')
-            soup.find(id='ch1_year').string = scorecards[4].showcase.showcase_date.strftime('%Y')
-            soup.find(id='ch2_month').string = scorecards[3].showcase.showcase_date.strftime('%b')
-            soup.find(id='ch2_year').string = scorecards[3].showcase.showcase_date.strftime('%Y')
-            soup.find(id='ch3_month').string = scorecards[2].showcase.showcase_date.strftime('%b')
-            soup.find(id='ch3_year').string = scorecards[2].showcase.showcase_date.strftime('%Y')
-            soup.find(id='ch4_month').string = scorecards[1].showcase.showcase_date.strftime('%b')
-            soup.find(id='ch4_year').string = scorecards[1].showcase.showcase_date.strftime('%Y')
             soup.find(id='ch5_month').string = scorecards[0].showcase.showcase_date.strftime('%b')
             soup.find(id='ch5_year').string = scorecards[0].showcase.showcase_date.strftime('%Y')
-
-            soup.find(id='ch1_shooting_iq').string = '{:.0f}'.format(scorecards[4].total_shooting)
-            soup.find(id='ch2_shooting_iq').string = '{:.0f}'.format(scorecards[3].total_shooting)
-            soup.find(id='ch3_shooting_iq').string = '{:.0f}'.format(scorecards[2].total_shooting)
-            soup.find(id='ch4_shooting_iq').string = '{:.0f}'.format(scorecards[1].total_shooting)
             soup.find(id='ch5_shooting_iq').string = '{:.0f}'.format(scorecards[0].total_shooting)
-            soup.find(id='avg_shooting_iq').string = '{:.0f}'.format(averages['total_shooting__avg'])
-
-            soup.find(id='ch1_passing_iq').string = '{:.0f}'.format(scorecards[4].total_passing)
-            soup.find(id='ch2_passing_iq').string = '{:.0f}'.format(scorecards[3].total_passing)
-            soup.find(id='ch3_passing_iq').string = '{:.0f}'.format(scorecards[2].total_passing)
-            soup.find(id='ch4_passing_iq').string = '{:.0f}'.format(scorecards[1].total_passing)
             soup.find(id='ch5_passing_iq').string = '{:.0f}'.format(scorecards[0].total_passing)
-            soup.find(id='avg_passing_iq').string = '{:.0f}'.format(averages['total_passing__avg'])
-
-            soup.find(id='ch1_dribbling_iq').string = '{:.0f}'.format(scorecards[4].total_dribbling)
-            soup.find(id='ch2_dribbling_iq').string = '{:.0f}'.format(scorecards[3].total_dribbling)
-            soup.find(id='ch3_dribbling_iq').string = '{:.0f}'.format(scorecards[2].total_dribbling)
-            soup.find(id='ch4_dribbling_iq').string = '{:.0f}'.format(scorecards[1].total_dribbling)
             soup.find(id='ch5_dribbling_iq').string = '{:.0f}'.format(scorecards[0].total_dribbling)
-            soup.find(id='avg_dribbling_iq').string = '{:.0f}'.format(averages['total_dribbling__avg'])
-
-            soup.find(id='ch1_control_iq').string = '{:.0f}'.format(scorecards[4].total_control)
-            soup.find(id='ch2_control_iq').string = '{:.0f}'.format(scorecards[3].total_control)
-            soup.find(id='ch3_control_iq').string = '{:.0f}'.format(scorecards[2].total_control)
-            soup.find(id='ch4_control_iq').string = '{:.0f}'.format(scorecards[1].total_control)
             soup.find(id='ch5_control_iq').string = '{:.0f}'.format(scorecards[0].total_control)
-            soup.find(id='avg_control_iq').string = '{:.0f}'.format(averages['total_control__avg'])
-
-            soup.find(id='ch1_skill_iq').string = '{:.0f}'.format(scorecards[4].grand_total)
-            soup.find(id='ch2_skill_iq').string = '{:.0f}'.format(scorecards[3].grand_total)
-            soup.find(id='ch3_skill_iq').string = '{:.0f}'.format(scorecards[2].grand_total)
-            soup.find(id='ch4_skill_iq').string = '{:.0f}'.format(scorecards[1].grand_total)
             soup.find(id='ch5_skill_iq').string = '{:.0f}'.format(scorecards[0].grand_total)
+            # averages
+            soup.find(id='avg_shooting_iq').string = '{:.0f}'.format(averages['total_shooting__avg'])
+            soup.find(id='avg_passing_iq').string = '{:.0f}'.format(averages['total_passing__avg'])
+            soup.find(id='avg_dribbling_iq').string = '{:.0f}'.format(averages['total_dribbling__avg'])
+            soup.find(id='avg_control_iq').string = '{:.0f}'.format(averages['total_control__avg'])
             soup.find(id='avg_skill_iq').string = '{:.0f}'.format(averages['grand_total__avg'])
+
+            if len(scorecards) >= 1:
+                soup.find(id='ch4_month').string = scorecards[1].showcase.showcase_date.strftime('%b')
+                soup.find(id='ch4_year').string = scorecards[1].showcase.showcase_date.strftime('%Y')
+                soup.find(id='ch4_shooting_iq').string = '{:.0f}'.format(scorecards[1].total_shooting)
+                soup.find(id='ch4_dribbling_iq').string = '{:.0f}'.format(scorecards[1].total_dribbling)
+                soup.find(id='ch4_control_iq').string = '{:.0f}'.format(scorecards[1].total_control)
+                soup.find(id='ch4_skill_iq').string = '{:.0f}'.format(scorecards[1].grand_total)
+                soup.find(id='ch4_passing_iq').string = '{:.0f}'.format(scorecards[1].total_passing)
+            if len(scorecards) >= 2:
+                soup.find(id='ch3_month').string = scorecards[2].showcase.showcase_date.strftime('%b')
+                soup.find(id='ch3_year').string = scorecards[2].showcase.showcase_date.strftime('%Y')
+                soup.find(id='ch3_shooting_iq').string = '{:.0f}'.format(scorecards[2].total_shooting)
+                soup.find(id='ch3_passing_iq').string = '{:.0f}'.format(scorecards[2].total_passing)
+                soup.find(id='ch3_dribbling_iq').string = '{:.0f}'.format(scorecards[2].total_dribbling)
+                soup.find(id='ch3_control_iq').string = '{:.0f}'.format(scorecards[2].total_control)
+                soup.find(id='ch3_skill_iq').string = '{:.0f}'.format(scorecards[2].grand_total)
+            if len(scorecards) >= 3:
+                soup.find(id='ch2_month').string = scorecards[3].showcase.showcase_date.strftime('%b')
+                soup.find(id='ch2_year').string = scorecards[3].showcase.showcase_date.strftime('%Y')
+                soup.find(id='ch2_shooting_iq').string = '{:.0f}'.format(scorecards[3].total_shooting)
+                soup.find(id='ch2_passing_iq').string = '{:.0f}'.format(scorecards[3].total_passing)
+                soup.find(id='ch2_dribbling_iq').string = '{:.0f}'.format(scorecards[3].total_dribbling)
+                soup.find(id='ch2_control_iq').string = '{:.0f}'.format(scorecards[3].total_control)
+                soup.find(id='ch2_skill_iq').string = '{:.0f}'.format(scorecards[3].grand_total)
+            if len(scorecards) >= 4:
+                soup.find(id='ch1_month').string = scorecards[4].showcase.showcase_date.strftime('%b')
+                soup.find(id='ch1_year').string = scorecards[4].showcase.showcase_date.strftime('%Y')
+                soup.find(id='ch1_shooting_iq').string = '{:.0f}'.format(scorecards[4].total_shooting)
+                soup.find(id='ch1_passing_iq').string = '{:.0f}'.format(scorecards[4].total_passing)
+                soup.find(id='ch1_dribbling_iq').string = '{:.0f}'.format(scorecards[4].total_dribbling)
+                soup.find(id='ch1_control_iq').string = '{:.0f}'.format(scorecards[4].total_control)
+                soup.find(id='ch1_skill_iq').string = '{:.0f}'.format(scorecards[4].grand_total)
 
             now = datetime.datetime.now()
             soup.find(id='copyright_year').string = str(now.year)
