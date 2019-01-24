@@ -93,12 +93,12 @@ def GenerateTradingCard(request, **kwargs):
     prev_link = request.META.get('HTTP_REFERER')
     try:
         player_object = Player.objects.get(id=pk)
-        png_file, file_name = tradingcard_generator.svgGenerator(player_object)
-        upload_file = open(png_file, 'rb')
+        file_location, file_name = tradingcard_generator.svgGenerator(player_object)
+        upload_file = open(file_location, 'rb')
         player_object.trading_card.save(file_name, upload_file)
         msg = 'Trading Card Generated for {}'.format(player_object)
         messages.add_message(request, messages.INFO, msg)
-        run(['rm', png_file])
+        run(['rm', file_location])
     except IndexError:
         msg = 'Player does not currently have any data'
         messages.add_message(request, messages.ERROR, msg)
