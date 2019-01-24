@@ -4,14 +4,12 @@ import requests
 import base64
 import bs4
 import datetime
-import time
 from subprocess import run
 
 from django.conf import settings
 from django.db.models import Avg
 
-from showcase import player_template
-from showcase.models import PlayerScorecard, Player
+from showcase.models import PlayerScorecard
 
 file_read = os.path.join(settings.BASE_DIR, 'player.svg')
 file_write = os.path.join(settings.BASE_DIR, 'player_latest.svg')
