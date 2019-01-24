@@ -114,7 +114,7 @@ def svgGenerator(player_data):
             w.close()
 
     timestamp = int(time.time())
-    png_file = '{}_{}.png'.format(player_name, timestamp)
+    png_file = '{}_{}_{}.png'.format(player_data.first_name, player_data.last_name, timestamp)
     file_location = os.path.join(settings.BASE_DIR, png_file)
     run(['inkscape', '-z', '-f', file_write, '--export-dpi=190', '-e', png_file])
 
