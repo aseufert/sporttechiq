@@ -91,19 +91,19 @@ def PlayerDetail(request, **kwargs):
 def GenerateTradingCard(request, **kwargs):
     pk = kwargs['pk']
     prev_link = request.META.get('HTTP_REFERER')
-    try:
-        player_object = Player.objects.get(id=pk)
-        file_location, file_name = tradingcard_generator.svgGenerator(player_object)
-        upload_file = open(file_location, 'rb')
-        player_object.trading_card.save(file_name, upload_file)
-        msg = 'Trading Card Generated for {}'.format(player_object)
-        messages.add_message(request, messages.INFO, msg)
-        run(['rm', file_location])
-    except IndexError:
-        msg = 'Player does not currently have any data'
-        messages.add_message(request, messages.ERROR, msg)
-    except Exception as e:
-        msg = e
-        messages.add_message(request, messages.ERROR, msg)
+    # try:
+    player_object = Player.objects.get(id=pk)
+    file_location, file_name = tradingcard_generator.svgGenerator(player_object)
+    upload_file = open(file_location, 'rb')
+    player_object.trading_card.save(file_name, upload_file)
+    msg = 'Trading Card Generated for {}'.format(player_object)
+    messages.add_message(request, messages.INFO, msg)
+    run(['rm', file_location])
+    # except IndexError:
+    #     msg = 'Player does not currently have any data'
+    #     messages.add_message(request, messages.ERROR, msg)
+    # except Exception as e:
+    #     msg = e
+    #     messages.add_message(request, messages.ERROR, msg)
 
     return redirect(prev_link)

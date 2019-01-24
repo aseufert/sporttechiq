@@ -69,7 +69,7 @@ def svgGenerator(player_data):
             soup.find(id='avg_control_iq').string = '{:.0f}'.format(averages['total_control__avg'])
             soup.find(id='avg_skill_iq').string = '{:.0f}'.format(averages['grand_total__avg'])
 
-            if len(scorecards) >= 1:
+            if len(scorecards) > 1:
                 soup.find(id='ch4_month').string = scorecards[1].showcase.showcase_date.strftime('%b')
                 soup.find(id='ch4_year').string = scorecards[1].showcase.showcase_date.strftime('%Y')
                 soup.find(id='ch4_shooting_iq').string = '{:.0f}'.format(scorecards[1].total_shooting)
@@ -77,7 +77,7 @@ def svgGenerator(player_data):
                 soup.find(id='ch4_control_iq').string = '{:.0f}'.format(scorecards[1].total_control)
                 soup.find(id='ch4_skill_iq').string = '{:.0f}'.format(scorecards[1].grand_total)
                 soup.find(id='ch4_passing_iq').string = '{:.0f}'.format(scorecards[1].total_passing)
-            if len(scorecards) >= 2:
+            if len(scorecards) > 2:
                 soup.find(id='ch3_month').string = scorecards[2].showcase.showcase_date.strftime('%b')
                 soup.find(id='ch3_year').string = scorecards[2].showcase.showcase_date.strftime('%Y')
                 soup.find(id='ch3_shooting_iq').string = '{:.0f}'.format(scorecards[2].total_shooting)
@@ -85,7 +85,7 @@ def svgGenerator(player_data):
                 soup.find(id='ch3_dribbling_iq').string = '{:.0f}'.format(scorecards[2].total_dribbling)
                 soup.find(id='ch3_control_iq').string = '{:.0f}'.format(scorecards[2].total_control)
                 soup.find(id='ch3_skill_iq').string = '{:.0f}'.format(scorecards[2].grand_total)
-            if len(scorecards) >= 3:
+            if len(scorecards) > 3:
                 soup.find(id='ch2_month').string = scorecards[3].showcase.showcase_date.strftime('%b')
                 soup.find(id='ch2_year').string = scorecards[3].showcase.showcase_date.strftime('%Y')
                 soup.find(id='ch2_shooting_iq').string = '{:.0f}'.format(scorecards[3].total_shooting)
@@ -93,7 +93,7 @@ def svgGenerator(player_data):
                 soup.find(id='ch2_dribbling_iq').string = '{:.0f}'.format(scorecards[3].total_dribbling)
                 soup.find(id='ch2_control_iq').string = '{:.0f}'.format(scorecards[3].total_control)
                 soup.find(id='ch2_skill_iq').string = '{:.0f}'.format(scorecards[3].grand_total)
-            if len(scorecards) >= 4:
+            if len(scorecards) > 4:
                 soup.find(id='ch1_month').string = scorecards[4].showcase.showcase_date.strftime('%b')
                 soup.find(id='ch1_year').string = scorecards[4].showcase.showcase_date.strftime('%Y')
                 soup.find(id='ch1_shooting_iq').string = '{:.0f}'.format(scorecards[4].total_shooting)
