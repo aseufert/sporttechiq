@@ -49,14 +49,14 @@ class ShowcaseScorecardAdmin(admin.ModelAdmin):
                     )
                 }),
             ('Control', {
-                'fields' : (
+                'fields': (
                     'control_thigh',
                     'control_foot',
                     'foot_tap'
                     )
                 }),
             ('Dribbling', {
-                'fields' : (
+                'fields': (
                     'speed_dribble',
                     'dribble_r',
                     'dribble_l',
@@ -64,7 +64,7 @@ class ShowcaseScorecardAdmin(admin.ModelAdmin):
                     )
                 }),
             ('Passing', {
-                'fields' : (
+                'fields': (
                     'long_r_1',
                     'long_r_2',
                     'long_l_1',
@@ -89,10 +89,10 @@ class ShowcaseScorecardAdmin(admin.ModelAdmin):
                     'throw_inside_2',
                     'throw_between_1',
                     'throw_between_2'
-                    )      
+                    )
                 }),
             ('Shooting', {
-                'fields' : (
+                'fields': (
                     'shoot_pk',
                     'shoot_run_r_1',
                     'shoot_run_r_2',
@@ -120,10 +120,11 @@ class PlayerAdmin(admin.ModelAdmin):
     def ScorecardActions(self, obj):
         return format_html(
                 '<a class="button" href="{}">Generate Scorecard</a>',
-                reverse('generate_trading_card', kwargs={'pk': obj.pk, 'first': obj.first_name, 'last': obj.last_name})
+                reverse('generate_trading_card', kwargs={'pk': obj.pk})
             )
-
+    #reverse('generate_trading_card', kwargs={'pk': obj.pk, 'first': obj.first_name, 'last': obj.last_name}
     ScorecardActions.short_description = 'Trading Card Generator'
+
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
@@ -237,4 +238,3 @@ class ClubAdmin(admin.ModelAdmin):
         'total_shooting_avg',
         'grand_total_avg'
     )
-

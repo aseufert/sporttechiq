@@ -1,18 +1,39 @@
+import os
 import time
 import requests
+import base64
+import bs4
+import datetime
+import time
+from subprocess import run
 
 from django.conf import settings
-from subprocess import run
-from showcase import player_template
-
-from showcase.models import PlayerScorecard, Player
 from django.db.models import Avg
 
+from showcase import player_template
+from showcase.models import PlayerScorecard, Player
 
-def svgGenerator(pk):
-    player_data = Player.objects.get(id=pk)
-    showcases = PlayerScorecard.objects.filter(player=pk).order_by('-id')
-    averages = showcases.aggregate(
+file_read = os.path.join(settings.BASE_DIR, 'player.svg')
+file_write = os.path.join(settings.BASE_DIR, 'player_latest.svg')
+
+
+def getImageBase64(link):
+    '''
+    Given link to photo, returns base64 encoded bytes
+    for injecting into inkscape SVG image tags
+    '''
+    r = requests.get(link, stream=True, timeout=3)
+    photo = b''
+    for chunk in r:
+        photo += chunk
+    base64_photo = base64.b64encode(photo)
+    return 'data:image/png;base64,{}'.format(base64_photo.decode('ascii'))
+
+
+def svgGenerator(player_data):
+    player_name = '{} {}'.format(player_data.first_name, player_data.last_name[0])
+    scorecards = PlayerScorecard.objects.filter(player=player_data.id).order_by('-id')
+    averages = scorecards.aggregate(
         Avg('total_shooting'),
         Avg('total_passing'),
         Avg('total_dribbling'),
@@ -20,66 +41,81 @@ def svgGenerator(pk):
         Avg('grand_total'),
         )
 
-    if player_data.photo:
-        # photos must be written to local directory to be rasterized properly
-        r = requests.get(player_data.photo.url)
-        local_file = '{}/showcase/static/img/player_photo.png'.format(settings.BASE_DIR)
-        open(local_file, 'wb').write(r.content)
-        player_photo = local_file
-    else:
-        player_photo = '{}/showcase/static/img/default_profile.png'.format(settings.BASE_DIR)
+    with open(file_read, 'r') as f:
+        with open(file_write, 'w') as w:
+            svg_read = f.read()
+            soup = bs4.BeautifulSoup(svg_read, 'xml')
+            f.close()
 
-    if player_data.team.club.photo:
-        # photos must be written to local directory to be rasterized properly
-        r = requests.get(player_data.team.club.photo.url)
-        local_file = '{}/showcase/static/img/club_photo.png'.format(settings.BASE_DIR)
-        open(local_file, 'wb').write(r.content)
-        club_photo = local_file
-    else:
-        club_photo = '{}/showcase/static/img/club.png'.format(settings.BASE_DIR)
+            if player_data.photo:
+                soup.find(id='player_headshot').attrs['xlink:href'] = getImageBase64(player_data.photo.url)
 
-    tradingcard_data = {
-        'first_name': player_data.first_name,
-        'last_name': player_data.last_name[0],
-        'birth_year': player_data.birth_year,
-        'height': showcases[0].height,
-        'country': player_data.country,
-        'city': player_data.city,
-        'state': player_data.state,
-        'club_icon': club_photo,
-        'photo': player_photo,
-        'no_scorecards': len(showcases),
-        'scorecards': [],
-        'grass_tile': '{}/showcase/static/img/grass_tile.png'.format(settings.BASE_DIR),
-        'avg': {k: int(v) for k, v in averages.items()},
-    }
-    for showcase in showcases[:5]:
-        showcase_date = showcase.showcase_name.showcase_date
-        scorecard_data = {
-            'month': showcase_date.strftime('%b'),
-            'year': showcase_date.strftime('%Y'),
-            'shooting': int(showcase.total_shooting),
-            'passing': int(showcase.total_passing),
-            'dribbling': int(showcase.total_dribbling),
-            'control': int(showcase.total_control),
-            'skill': int(showcase.grand_total)
-        }
-        tradingcard_data['scorecards'].append(scorecard_data)
+            for scorecard in scorecards:
+                print(scorecard.showcase.showcase_date)
+                print(scorecard.total_shooting)
 
-    svg_file = player_template.svg_lines.format(
-      second_block=player_template.block_2.format(**tradingcard_data) if tradingcard_data['no_scorecards'] >= 2 else '',
-      third_block=player_template.block_3.format(**tradingcard_data) if tradingcard_data['no_scorecards'] >= 3 else '',
-      fourth_block=player_template.block_4.format(**tradingcard_data) if tradingcard_data['no_scorecards'] >= 4 else '',
-      fifth_block=player_template.block_5.format(**tradingcard_data) if tradingcard_data['no_scorecards'] >= 5 else '',
-      **tradingcard_data
-    )
+            soup.find(id='skill_iq_latest').string = '{:.0f}'.format(averages['grand_total__avg'])
+            soup.find(id='player_name').string = player_name
+            soup.find(id='player_birth_year').string = '{}'.format(player_data.birth_year)
+            soup.find(id='player_gender').string = player_data.gender
+            soup.find(id='player_nation').string = player_data.country
+            soup.find(id='player_city').string = player_data.city
+
+            soup.find(id='ch1_month').string = scorecards[4].showcase.showcase_date.strftime('%b')
+            soup.find(id='ch1_year').string = scorecards[4].showcase.showcase_date.strftime('%Y')
+            soup.find(id='ch2_month').string = scorecards[3].showcase.showcase_date.strftime('%b')
+            soup.find(id='ch2_year').string = scorecards[3].showcase.showcase_date.strftime('%Y')
+            soup.find(id='ch3_month').string = scorecards[2].showcase.showcase_date.strftime('%b')
+            soup.find(id='ch3_year').string = scorecards[2].showcase.showcase_date.strftime('%Y')
+            soup.find(id='ch4_month').string = scorecards[1].showcase.showcase_date.strftime('%b')
+            soup.find(id='ch4_year').string = scorecards[1].showcase.showcase_date.strftime('%Y')
+            soup.find(id='ch5_month').string = scorecards[0].showcase.showcase_date.strftime('%b')
+            soup.find(id='ch5_year').string = scorecards[0].showcase.showcase_date.strftime('%Y')
+
+            soup.find(id='ch1_shooting_iq').string = '{:.0f}'.format(scorecards[4].total_shooting)
+            soup.find(id='ch2_shooting_iq').string = '{:.0f}'.format(scorecards[3].total_shooting)
+            soup.find(id='ch3_shooting_iq').string = '{:.0f}'.format(scorecards[2].total_shooting)
+            soup.find(id='ch4_shooting_iq').string = '{:.0f}'.format(scorecards[1].total_shooting)
+            soup.find(id='ch5_shooting_iq').string = '{:.0f}'.format(scorecards[0].total_shooting)
+            soup.find(id='avg_shooting_iq').string = '{:.0f}'.format(averages['total_shooting__avg'])
+
+            soup.find(id='ch1_passing_iq').string = '{:.0f}'.format(scorecards[4].total_passing)
+            soup.find(id='ch2_passing_iq').string = '{:.0f}'.format(scorecards[3].total_passing)
+            soup.find(id='ch3_passing_iq').string = '{:.0f}'.format(scorecards[2].total_passing)
+            soup.find(id='ch4_passing_iq').string = '{:.0f}'.format(scorecards[1].total_passing)
+            soup.find(id='ch5_passing_iq').string = '{:.0f}'.format(scorecards[0].total_passing)
+            soup.find(id='avg_passing_iq').string = '{:.0f}'.format(averages['total_passing__avg'])
+
+            soup.find(id='ch1_dribbling_iq').string = '{:.0f}'.format(scorecards[4].total_dribbling)
+            soup.find(id='ch2_dribbling_iq').string = '{:.0f}'.format(scorecards[3].total_dribbling)
+            soup.find(id='ch3_dribbling_iq').string = '{:.0f}'.format(scorecards[2].total_dribbling)
+            soup.find(id='ch4_dribbling_iq').string = '{:.0f}'.format(scorecards[1].total_dribbling)
+            soup.find(id='ch5_dribbling_iq').string = '{:.0f}'.format(scorecards[0].total_dribbling)
+            soup.find(id='avg_dribbling_iq').string = '{:.0f}'.format(averages['total_dribbling__avg'])
+
+            soup.find(id='ch1_control_iq').string = '{:.0f}'.format(scorecards[4].total_control)
+            soup.find(id='ch2_control_iq').string = '{:.0f}'.format(scorecards[3].total_control)
+            soup.find(id='ch3_control_iq').string = '{:.0f}'.format(scorecards[2].total_control)
+            soup.find(id='ch4_control_iq').string = '{:.0f}'.format(scorecards[1].total_control)
+            soup.find(id='ch5_control_iq').string = '{:.0f}'.format(scorecards[0].total_control)
+            soup.find(id='avg_control_iq').string = '{:.0f}'.format(averages['total_control__avg'])
+
+            soup.find(id='ch1_skill_iq').string = '{:.0f}'.format(scorecards[4].grand_total)
+            soup.find(id='ch2_skill_iq').string = '{:.0f}'.format(scorecards[3].grand_total)
+            soup.find(id='ch3_skill_iq').string = '{:.0f}'.format(scorecards[2].grand_total)
+            soup.find(id='ch4_skill_iq').string = '{:.0f}'.format(scorecards[1].grand_total)
+            soup.find(id='ch5_skill_iq').string = '{:.0f}'.format(scorecards[0].grand_total)
+            soup.find(id='avg_skill_iq').string = '{:.0f}'.format(averages['grand_total__avg'])
+
+            now = datetime.datetime.now()
+            soup.find(id='copyright_year').string = str(now.year)
+
+            w.write(str(soup))
+            w.close()
+
     timestamp = int(time.time())
-    file_name = '{}_{}_{}.png'.format(tradingcard_data['first_name'], tradingcard_data['last_name'], timestamp)
-    file_location = '{}/showcase/static/img/{}'.format(settings.BASE_DIR, file_name)
-    local_svg = '{}/showcase/static/img/player.svg'.format(settings.BASE_DIR)
-    outF = open(local_svg, 'w', encoding='utf-8')
-    outF.write(svg_file)
-    outF.close()
-    run(['inkscape', '-z', '-f', local_svg, '--export-dpi=110', '-e', file_location])
+    png_file = '{}_{}.png'.format(player_name, timestamp)
+    file_location = os.path.join(settings.BASE_DIR, png_file)
+    run(['inkscape', '-z', '-f', file_write, '--export-dpi=190', '-e', png_file])
 
-    return file_location, file_name
+    return file_location, png_file

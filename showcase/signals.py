@@ -8,7 +8,8 @@ from showcase import tradingcard_generator
 
 @receiver(post_save, sender=PlayerScorecard)
 def callSVGGenerator(sender, signal, instance, **kwargs):
-    print('svgGenerator Ran. Hurray')
+    pass
+    # print('svgGenerator Ran. Hurray')
     '''
     player_photo    = '{}/media/{}'.format(settings.SERVER_BASE, instance.player.photo)
     total_control   = PlayerScorecard.objects.filter(player=instance.player).aggregate(Avg('total_control'))['total_control__avg']

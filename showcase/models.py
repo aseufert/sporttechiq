@@ -9,6 +9,7 @@ from users.models import User
 from showcase import file_size_validator
 import showcase.dropdowns as choices
 
+
 class Player(models.Model):
     first_name = models.CharField(max_length=100, help_text='First Name')
     last_name = models.CharField(max_length=100, help_text='Last Name')
@@ -37,9 +38,21 @@ class Player(models.Model):
     team = models.ForeignKey('Team', on_delete=models.CASCADE, null=True, blank=True)
     gender = models.CharField(max_length=1, choices=choices.genders)
     city = models.CharField(max_length=100, null=True, blank=True)
-    state = models.CharField(max_length=3, null=True, blank=True, choices=choices.states)
-    region = models.CharField(max_length=10, null=True, blank=True, choices=choices.regions)
-    country = models.CharField(max_length=100, null=True, blank=True, choices=choices.countries)
+    state = models.CharField(
+        max_length=3,
+        null=True,
+        blank=True,
+        choices=choices.states
+    )
+    region = models.CharField(
+        max_length=10, null=True, blank=True, choices=choices.regions
+    )
+    country = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True,
+        choices=choices.countries
+    )
 
     def __str__(self):
         return '{} {}'.format(self.first_name, self.last_name)
@@ -149,7 +162,6 @@ class PlayerScorecard(models.Model):
     total_passing = models.FloatField(default=0.0)
     total_shooting = models.FloatField(default=0.0)
     grand_total = models.FloatField(default=0.0)
-
 
     '''calculated fields'''
     @property
@@ -464,7 +476,7 @@ class Station(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     class Meta:
         ordering = ('index',)
 
@@ -508,6 +520,7 @@ class FieldLayout(models.Model):
 
     def __str__(self):
         return self.name
+
 
 # Make email field required apparently. Need for abstract user class
 AbstractUser._meta.get_field('email').blank = False

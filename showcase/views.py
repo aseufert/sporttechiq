@@ -86,19 +86,19 @@ def PlayerDetail(request, **kwargs):
             'player_comps': player_comps
         })
 
+
 # TODO: SET PERMISSION ON THIS TO ADMIN
 def GenerateTradingCard(request, **kwargs):
-    first       = kwargs['first']
-    last        = kwargs['last']
-    pk          = kwargs['pk']
-    prev_link   = request.META.get('HTTP_REFERER')
+    pk = kwargs['pk']
+    prev_link = request.META.get('HTTP_REFERER')
     try:
-        svg_file, file_name = tradingcard_generator.svgGenerator(pk)
-        upload_file = open(svg_file, 'rb')
-        Player.objects.get(id=pk).trading_card.save(file_name, upload_file)
-        msg  = 'Trading Card Generated for {} {}'.format(first, last)
+        player_object = Player.objects.get(id=pk)
+        png_file, file_name = tradingcard_generator.svgGenerator(player_object)
+        upload_file = open(png_file, 'rb')
+        player_object.trading_card.save(file_name, upload_file)
+        msg = 'Trading Card Generated for {}'.format(player_object)
         messages.add_message(request, messages.INFO, msg)
-        run(['rm', svg_file])
+        run(['rm', png_file])
     except IndexError:
         msg = 'Player does not currently have any data'
         messages.add_message(request, messages.ERROR, msg)
