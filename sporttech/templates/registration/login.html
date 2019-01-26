@@ -38,12 +38,12 @@
 
         <div class="form-group">
           <td>{{ form.username.label_tag }}</td>
-          <input type="text" class="form-control" autofocus maxlength="254" required name="{{ form.username.html_name }}" id="{{ form.username.id_for_label }}">
+          <input type="text" class="form-control" autofocus maxlength="254" required name="{{ form.username.html_name }}" id="{{ form.username.id_for_label }}" autocomplete="username">
         </div>
 
         <div class="form-group">
           <td>{{ form.password.label_tag }}</td>
-          <input type="password" class="form-control mb-2" id="{{ form.password.id_for_label }}" required name="{{ form.password.html_name }}">
+          <input type="password" class="form-control mb-2" id="{{ form.password.id_for_label }}" required name="{{ form.password.html_name }}" autocomplete="current-password">
         </div>
         
         <div>
@@ -73,10 +73,9 @@
   <script>
     $(function () {
       $('[data-toggle="tooltip"]').tooltip();
-    })
+    });
 
-
-    $("#login-form").addEventListener('submit', function (event) {
+    $("#login-form")[0].addEventListener('submit', function (event) {
       if ($("#signup-form").checkValidity() === false) {
         event.preventDefault();
         event.stopPropagation();
