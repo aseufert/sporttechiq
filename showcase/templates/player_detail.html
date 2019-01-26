@@ -33,7 +33,7 @@
               {% if scorecard.height %}
               <tr>
                 <td>Height</td>
-                <td>{{ scorecard.height }}</td>
+                <td>{{ scorecard.height }}"</td>
               </tr>{% endif %}
             </table>
           </div>
@@ -74,7 +74,7 @@
           <div id="chart-demo-1" class="iq-chart"></div>
           Date: <span div class="dropdown">
               <select id="selection_1" onchange="playerChart(1)">{% for showcase in showcases %}
-                  <option value="{{ forloop.counter0 }}">{{ showcase.showcase_name }}</option>
+                  <option value="{{ forloop.counter0 }}">{{ showcase.showcase.showcase_name }}</option>
               {% endfor %}
                 </select>
           </span>
@@ -422,7 +422,7 @@
     var data = {
       "showcases": [{% for showcase in showcases %}
           [
-            "{{ showcase.showcase_name }}",
+            "{{ showcase.showcase.showcase_name }}",
             {{ showcase.total_shooting|floatformat:'0' }},
             {{ showcase.total_passing|floatformat:'0' }},
             {{ showcase.total_dribbling|floatformat:'0' }},

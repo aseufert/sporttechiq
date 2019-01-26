@@ -28,13 +28,13 @@ def AccountProfile(request):
 
 def PlayerProfile(request):
     user_id = request.user.pk
-    if Player.objects.filter(user=user_id).exists() or request.user.user_type != 2:
+    try:
         player = Player.objects.get(user=user_id)
         return redirect(reverse('player_detail', kwargs={
-                'pk': player.id,
-                'slug': player.slug
-            }))
-    else:
+            'pk': player.id,
+            'slug': player.slug
+        }))
+    except Player.DoesNotExist:
         return redirect('/?message=player has no data')
 
 
@@ -112,7 +112,7 @@ def CoachProfile(request):
             average_dribbling=Avg('total_dribbling'),
             average_control=Avg('total_control'),
             average_total=Avg('grand_total')
-            )
+        )
 
         return render(request, 'profiles/coach_profile.html', context={
             'players': player_info,
@@ -120,13 +120,13 @@ def CoachProfile(request):
             'club': club_averages,
             'count': player_count,
             'showcase_info': showcase_info
-            })
+        })
     else:
         return redirect('/')
 
 
 def Signup(request):
-    if request.method =='POST':
+    if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
@@ -140,7 +140,7 @@ def Signup(request):
             if form_user_type == '2':
                 return redirect('player_registration')
             else:
-                return redirect('/?type={}'.format(form_user_type)) # query string is just a test
+                return redirect('/?type={}'.format(form_user_type))  # query string is just a test
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
@@ -152,7 +152,7 @@ def Registration(request):
     ADD: user must be logged in because I'll likely snag request.user data
     '''
 
-    if request.method =='POST':
+    if request.method == 'POST':
         form = RegistrationForm(request.POST)
 
         if form.is_valid():

@@ -32,7 +32,10 @@ def ShowcaseDetail(request, pk):
 
 def PlayerDetail(request, **kwargs):
     player_id = kwargs['pk']
-    player = Player.objects.get(id=player_id)
+    try:
+        player = Player.objects.get(id=player_id)
+    except Player.DoesNotExist:
+        return redirect('/')
 
     player_data = PlayerScorecard.objects.filter(player=player.id).order_by('id')
     scorecard = {
@@ -42,7 +45,7 @@ def PlayerDetail(request, **kwargs):
         'body_fat': player_data[0].body_fat,
         'pulse': player_data[0].pulse,
         'oxygen': player_data[0].oxygen,
-        'player_number': player_data[0].player_number,
+        'player_number': player.player_number,
         'pk': int(player_data[0].shoot_pk),
         'on_run_right': int(mean([player_data[0].shoot_run_r_1, player_data[0].shoot_run_r_2, player_data[0].shoot_run_r_3])),
         'on_run_left': int(mean([player_data[0].shoot_run_l_1, player_data[0].shoot_run_l_2, player_data[0].shoot_run_l_3])),
