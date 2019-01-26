@@ -107,6 +107,18 @@
         </nav>
 
         {% block content %}{% endblock %}
+        
+        {% if messages %}
+        <!-- alerts -->
+        {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show fixed-bottom col-6" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endfor %}
+        {% endif %}
 
         <!--Footer-->
         <footer class="bg-primary">
@@ -153,14 +165,22 @@
         <!--SMOOTH SCROLL TO ANCHOR LINKS-->
         <script>
         $(document).on("click", 'a[href^="#"]', function (event) {
-        event.preventDefault();
-        var href = $.attr(this, 'href');
-        $("html, body").animate({
-        scrollTop: $(href).offset().top
-        }, 550, function () {
-        window.location.hash = href;
+          event.preventDefault();
+          var href = $.attr(this, 'href');
+          $("html, body").animate({
+          scrollTop: $(href).offset().top
+          }, 550, function () {
+          window.location.hash = href;
         });
         });
+        </script>
+
+        <script>
+          window.setTimeout(function() {
+              $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                  $(this).remove(); 
+              });
+          }, 10000);
         </script>
 
         {# Global javascript #}

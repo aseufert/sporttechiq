@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.db.models import Avg
+from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 
@@ -42,10 +43,22 @@ def CoachProfile(request):
     try:
         coach_data = Coach.objects.get(user=request.user.pk)
     except Coach.DoeNotExist:
+        messages.add_message(
+            request,
+            messages.INFO,
+            'You do not currently have a team assigned to you. Please reach out to bmoure@sporttechiq.com to complete your registration.',
+            extra_tags='alert-danger'
+        )
         return redirect('/')
     try:
         team_data = Team.objects.get(coach=coach_data.id)
     except Team.DoesNotExist:
+        messages.add_message(
+            request,
+            messages.INFO,
+            'You do not currently have a team assigned to you. Please reach out to bmoure@sporttechiq.com to complete your registration.',
+            extra_tags='alert-danger'
+        )
         return redirect('/')
 
     team_averages = {
