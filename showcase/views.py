@@ -27,7 +27,7 @@ def ShowcaseDetail(request, pk):
     return render(request, 'showcase/showcase_detail.html', context={
         'showcase': showcase,
         'player_in_scorecard': player_in_scorecard
-        })
+    })
 
 
 def PlayerDetail(request, **kwargs):
@@ -80,14 +80,14 @@ def PlayerDetail(request, **kwargs):
         Avg('total_dribbling'),
         Avg('total_control'),
         Avg('grand_total'),
-        )
+    )
 
     return render(request, 'player_detail.html', context={
-            'player': player,
-            'scorecard': scorecard,
-            'showcases': player_data,
-            'player_comps': player_comps
-        })
+        'player': player,
+        'scorecard': scorecard,
+        'showcases': player_data,
+        'player_comps': player_comps
+    })
 
 
 # TODO: SET PERMISSION ON THIS TO ADMIN
