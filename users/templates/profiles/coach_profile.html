@@ -87,7 +87,7 @@
           <br />with
             <span class="dropdown">
               <select id="selection_2" onchange="loadChart(1)">{% for showcase in showcase_info %}
-                <option value="{{ showcase.showcase_name__showcase_name }}">{{ showcase.showcase_name__showcase_name }}</option>
+                <option value="{{ showcase.showcase__showcase_name }}">{{ showcase.showcase__showcase_name }}</option>
               {% endfor %}
                 </select>
             </span>
@@ -445,8 +445,8 @@
       {{ club.grand_total|floatformat:'0' }}
       ],
       {% for showcase in showcase_info %}
-      "{{ showcase.showcase_name__showcase_name }}":[
-      "{{ showcase.showcase_name__showcase_name }}",
+      "{{ showcase.showcase__showcase_name }}":[
+      "{{ showcase.showcase__showcase_name }}",
       {{ showcase.average_shooting|floatformat:'0' }},
       {{ showcase.average_passing|floatformat:'0' }},
       {{ showcase.average_dribbling|floatformat:'0' }},
