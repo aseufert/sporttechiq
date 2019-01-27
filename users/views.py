@@ -48,7 +48,7 @@ def PlayerProfile(request):
 def CoachProfile(request):
     try:
         coach_data = Coach.objects.get(user=request.user.pk)
-    except Coach.DoeNotExist:
+    except Coach.DoesNotExist:
         messages.add_message(
             request,
             messages.INFO,

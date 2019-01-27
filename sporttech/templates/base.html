@@ -101,7 +101,7 @@
           
             </ul>
             <span class="navbar-text">
-              <span class="navbar-date" id="insert-date"></span>
+              {% now "M d, Y" %}
             </span>
           </div>
         </nav>
@@ -148,19 +148,10 @@
                   </ul>
                 </nav>
             </div>
-            <div class="copyright col-12 py-2 text-center">© 2018 Sport Tech IQ. All Rights Reserved.</div>
+            <div class="copyright col-12 py-2 text-center">© 2019 Sport Tech IQ. All Rights Reserved.</div>
         </footer>
 
         </div>
-
-        <script>
-        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"
-        ];
-        var d = new Date()
-        var new_date = monthNames[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
-        document.getElementById("insert-date").innerHTML = new_date;
-        </script>
 
         <!--SMOOTH SCROLL TO ANCHOR LINKS-->
         <script>
