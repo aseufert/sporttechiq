@@ -36,7 +36,13 @@ def PlayerProfile(request):
             'slug': player.slug
         }))
     except Player.DoesNotExist:
-        return redirect('/?message=player has no data')
+        messages.add_message(
+            request,
+            messages.INFO,
+            'You do not currently have any play data associated to you. Please reach out to bmoure@sporttechiq.com to complete your registration.',
+            extra_tags='alert-danger'
+        )
+        return redirect('/')
 
 
 def CoachProfile(request):
