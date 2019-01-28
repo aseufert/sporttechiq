@@ -99,8 +99,8 @@ class PlayerScorecard(models.Model):
     '''
     model for inserting scorecard data from showcase
     '''
-    five_star = ((1.0, '5 Star'), (0.75, '4 Star'), (0.5, '3 Star'), (0.25, '2 Star'), (0, '1 Star'))
-    two_star = ((1.0, '5 Star'), (0, '1 Star'))
+    five_star = ((1, '5 Star'), (0.75, '4 Star'), (0.5, '3 Star'), (0.25, '2 Star'), (0, '1 Star'))
+    two_star = ((1, '5 Star'), (0, '1 Star'))
 
     player = models.ForeignKey(Player, related_name='player', on_delete=models.SET_NULL, null=True)
     showcase = models.ForeignKey('Showcase', on_delete=models.SET_NULL, null=True)
