@@ -28,3 +28,12 @@ class SectionHeading(blocks.StructBlock):
         template = 'home/blocks/section_heading.html'
         icon = 'placeholder'
         label = 'Section Heading'
+
+
+class CenteredBlock(blocks.StructBlock):
+    paragraph = blocks.RichTextBlock(required=False)
+
+    class Meta:
+        template = 'home/blocks/centered_block.html'
+        icon = 'placeholder'
+        label = 'Centered Block'
