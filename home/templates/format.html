@@ -20,10 +20,8 @@
             <div class="col-12 col-sm-5 col-lg-4">
               <nav class="nav flex-column align-items-center justify-content-center">
                 {% for station in stations %}
-                {% if station.display %}
-                {% if not forloop.counter|divisibleby:"2" %}
+                {% if station.display and station.index < 10 %}
                 <a class="nav-link pb-0" href="#{{ station.name|cut:" " }}">{{ station.name }}</a>
-                {% endif %}
                 {% endif %}
                 {% endfor %}
               </nav>
@@ -31,10 +29,8 @@
             <div class="col-12 col-sm-5 col-lg-4">
               <nav class="nav flex-column align-items-center justify-content-center">
                 {% for station in stations %}
-                {% if station.display %}
-                {% if forloop.counter|divisibleby:"2" %}
+                {% if station.display and station.index > 10 %}
                 <a class="nav-link pb-0" href="#{{ station.name|cut:" " }}">{{ station.name }}</a>
-                {% endif %}
                 {% endif %}
                 {% endfor %}
               </nav>
