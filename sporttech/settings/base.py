@@ -142,6 +142,7 @@ WAGTAIL_SITE_NAME = "SportTech IQ"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'sporttech', 'static'),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'sporttech', 'static')
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'sporttech', 'media')
