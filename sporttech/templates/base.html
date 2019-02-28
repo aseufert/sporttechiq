@@ -20,7 +20,7 @@
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
         <meta name="Description" content="SportTech IQ features informative, data-driven analysis on youth players.">
         <meta name="Keywords" content="Soccer Futbol Sports Analytics">
-        <link rel="shortcut icon" href="{% static "img/favicon.ico" %}" type="image/x-icon">
+        <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
         {% if debug %}
         <meta name="robots" content="noindex" />
         {% else %}
@@ -36,7 +36,8 @@
 
         <!-- Required libraries -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:400,600&amp;subset=latin-ext">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
         <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
         <link rel="stylesheet" href="{% static "css/bootstrap-sortable.css" %}">
         <link rel="stylesheet" href="{% static "css/styles.css" %}">
@@ -57,47 +58,24 @@
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- End Google Tag Manager (noscript) -->
         <div>
+      <!--NAVIGATION BAR-->
+      <nav class="navbar navbar-expand-lg bg-primary navbar-dark fixed-top py-0 px-4" id="top-menu">
+        <a href="/" title="SportTechIQ">
+          <span class="navbar-brand ml-lg-3 ml-md-2"><img src="/static/img/menu_logo.png"></span>
+        </a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+          data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarToggler">
+          <ul class="main-menu navbar-nav mx-auto">
 
-        <!--NAVIGATION BAR-->
-        <nav class="navbar navbar-expand-lg bg-primary navbar-dark fixed-top py-0 px-4" id="top-menu">
-          <a href="/" title="SportTechIQ">
-            <span class="navbar-brand ml-lg-3 ml-md-2"><img src="{% static "img/menu_logo.png" %}"></span> 
-          </a>
-          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <div class="collapse navbar-collapse" id="navbarToggler">
-            <ul class="main-menu navbar-nav mx-auto">
-              {% if user.is_authenticated %}
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle js-scroll-trigger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {{ user.get_username }}
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="{% url 'logout'%}?next=/">logout</a>
-                </div>
-
-              </li>{% else %}
-              <li class="nav-item">
-                  <a class="nav-link" href="{% url 'signup' %}">signup</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="{% url 'login' %}?next={{request.path}}">login</a>
-              </li>{% endif %}
-              <li class="nav-item">
-                <a class="nav-link" href="/format">skill challenge</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/#about-us">about</a>
-              </li>
-            </ul>
-            <span class="navbar-text">
-              {% now "M d, Y" %}
-            </span>
-          </div>
-        </nav>
+          </ul>
+          <span class="navbar-text">
+            <span class="navbar-date" id="insert-date"></span>
+          </span>
+        </div>
+      </nav>
 
         {% block content %}{% endblock %}
         

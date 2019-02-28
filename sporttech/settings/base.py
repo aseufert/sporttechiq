@@ -50,7 +50,6 @@ INSTALLED_APPS = [
 
     'modelcluster',
     'taggit',
-    'storages',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -140,6 +139,13 @@ USE_TZ = True
 # Wagtail settings
 WAGTAIL_SITE_NAME = "SportTech IQ"
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'sporttech', 'static'),
+]
+STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'sporttech', 'media')
+MEDIA_ROOT = '/media/'
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),

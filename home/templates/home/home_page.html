@@ -6,57 +6,135 @@
 {% load static %}
 
 {% block content %}
-  <header class="container-fluid" id="title-header">
-      <div class="row mt-5 pt-5 pb-4 align-items-center justify-content-center ">
-        <div class="col col-md-8 col-lg-4 text-center justify-content-center">
-          <h1>{{ page.heading }}</h1>
+  
+    <!--HEADER/TITLE OF THE HOME PAGE-->
+    <header class="container-fluid" id="title-header">
+      <h1 class="mt-5 pt-5 pb-4 text-center">Watch Smarter with the world's best Quality goal highlights</h1>
+      <div
+        class="d-flex flex-column flex-lg-row  mt-2 pt-2 pb-4 align-items-lg-stretch justify-content-center align-items-center">
+
+        <div class="col-lg-6 col-xl-7">
+          <p class="text-center mt-md-1 mb-lg-0 mb-3 px-4">Other media only show Shots on Goal, but almost all goals are scored within <span class="text-nowrap">1 yard </span>of each post. <br>So we created Quality Shots!</p>
+        </div>
+        <div class="col-12 col-sm-12 col-md-10 col-lg-6 col-xl-5 px-6 mb-2 text-center justify-content-center">
           <div class="embed-responsive embed-responsive-16by9 mb-4">
-            {% embed page.video %}
+            <iframe src="https://www.youtube.com/embed/gWHEgj1XY3w"  frameborder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              class="embed-responsive-item" allowfullscreen></iframe>
           </div>
+          <p>
+            <a class="header-icon" href="https://www.youtube.com/channel/UCsJ6LhFGMk86U5C4R3rWWsQ" title="Youtube"><i
+                class="fab fa-youtube"></i></a>
+            <a class="header-icon" href="https://twitter.com/SporttechIQ" title="Twitter"><i
+                class="fab fa-twitter"></i></a>
+            <a class="header-icon" href="https://www.instagram.com/sporttechiq/" title="Instagram"><i
+                class="fab fa-instagram"></i></a>
+
+            <a class="header-icon" href="#video-archive" title="Video Archive"><i class="fas fa-file-video"></i></a>
+          </p>
         </div>
-        <div class="col-lg-8 d-flex flex-column flex-md-row pb-sm-4 pb-4 pb-lg-1 justify-content-center align-items-center cards-container">
-          {% image page.image_1 original as image_1 %}
-          <span><img src="{{ image_1.url }}" class="header-card my-2 my-md-0 mx-md-3 img-responsive"></span>
-          {% image page.image_2 original as image_2 %}
-          <span><img src="{{ image_2.url }}" class="header-card my-2 my-md-0 mx-md-3 img-responsive"></span>
-          <span style="position:relative;display:inline-block">
-              {% image page.image_3 original as image_3 %}
-              <span><img src="{{ image_3.url }}" class="header-card my-2 my-md-0 mx-md-3 img-fluid info-full"></span>
-            <a href="#" class="info-i-button" data-original-title="" title=""></a>
-          </span>
-        </div>
+
       </div>
 
     </header>
 
-    {% for block in page.body %}
-          <section class="container pt-4">
-            {% include_block block %}
-          </section>
-    {% endfor %}
 
-    <span id="about-us" class="anchor"></span>
-    <section class="container pt-2 mb-5">
-      <h2 class="display-4  py-3">About us</h2>
 
-      <div class="row align-items-top justify-content-center">
-        <div class="col-lg pb-4 px-2 text-center">
-          <img src="{% static "img/tc_mitchell.png" %}" class="key-feature-image img-fluid" alt="Mitchell Moure. Lifelong soccer player and fan. Florida Youth Soccer Association Certified Referee over 4 years. University of South Florida student.">
+    <section class="container pt-2 mt-4">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-12 col-lg-5 text-center">
+          <img src="/static/img/tc_qz.png" class="key-feature-image">
         </div>
-        <div class="col-lg pb-4 px-2 text-center">
-          <img src="{% static "img/tc_brian.png" %}" class="key-feature-image img-fluid" alt="Brian Moure. USASA Soccer National Champion and AFGL Footgolf National Finalist. Certified Health Coach.Compassion Partner and Boys and Girls Clubs Volunteer. MBA Emory University, BA Wake Forest University">
-        </div>
-        <div class="col-lg pb-4 px-2 text-center">
-          <img src="{% static "img/tc_christian_silva.png" %}" class="key-feature-image img-fluid" alt="Christian Silva">
-        </div>
-        <div class="col-lg pb-4 px-2 text-center">
-          <img src="{% static "img/tc_alex.png" %}" class="key-feature-image img-fluid" alt="Alexander Seufert">
-        </div>
-        <div class="col-lg pb-4 px-2 text-center">
-          <img src="{% static "img/tc_valentin.png" %}" class="key-feature-image img-fluid" alt="Valentin Kovshik">
+        <div class="col-12 col-lg-5 py-2">
+          <p class="descpription">
+            Our Blue Zone shows Quality Chances, where most goals are scored from. <br>Our Green Zone shows Quality Shots, where almost all goals are scored. <br>The NFL has the Red Zone. Now football has the Blue and Green Zones!</p>
         </div>
       </div>
     </section>
 
+    <section class="container pt-2 mt-4">
+        <div class="row align-items-center justify-content-center">
+          <div class="col-12 col-lg-5 text-center">
+            <img src="/static/img/tc_qsp.png" class="key-feature-image">
+          </div>
+          <div class="col-12 col-lg-5 py-2">
+            <p class="descpription">
+              Cut through the clutter of football data. <br>Focus on Quality stats! </p>
+          </div>
+        </div>
+      </section>
+
+
+
+    <span id="video-archive" class="anchor"></span>
+    <section class="container pt-2 mb-5">
+      <h2 class="display-4  py-3">Video Archive</h2>
+
+      <div class="d-flex flex-md-row flex-column justify-content-center align-items-center align-items-md-start">
+        <div class="col-11 col-md-4">
+          <blockquote class="twitter-tweet" data-lang="en">
+            <p lang="en" dir="ltr">Gündogan with a 1st touch Quality Shot (within 1 yard of post)❗️<br>▪️<br>The
+              world&#39;s best score more 1st touch goals than you might think. He already had the right Quality Shot
+              Zone in mind in a split second. Watch Smarter ✅ <a
+                href="https://t.co/U9yvYnTSx1">pic.twitter.com/U9yvYnTSx1</a></p>&mdash; SportTech IQ (@SportTechIQ) <a
+              href="https://twitter.com/SportTechIQ/status/1096487767645790209?ref_src=twsrc%5Etfw">February 15,
+              2019</a>
+          </blockquote>
+          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+        </div>
+        <div class="col-11 col-md-4">
+          <blockquote class="twitter-tweet" data-lang="en">
+            <p lang="en" dir="ltr">Agüero with one of the many Quality Goals™️on display this match🔥<br>▪️<br>Quality
+              Shot: Within 1 yard of the either post<br>Quality Goal: Scores from a Quality Shot<br>▪️<br>Watch Smarter
+              with SportTech IQ ✅ <a href="https://t.co/nDUY3ddX0U">pic.twitter.com/nDUY3ddX0U</a></p>&mdash; SportTech
+            IQ (@SportTechIQ) <a
+              href="https://twitter.com/SportTechIQ/status/1095495031882960896?ref_src=twsrc%5Etfw">February 13,
+              2019</a>
+          </blockquote>
+          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+        </div>
+
+        <div class="col-11 col-md-4">
+          <blockquote class="twitter-tweet" data-lang="en">
+            <p lang="en" dir="ltr">See what <a
+                href="https://twitter.com/SportTechIQ?ref_src=twsrc%5Etfw">@sporttechiq</a> is all about❗️click link in
+              bio to get your own Player Card 🤩<br>▪️<br>The world’s best Goal Stats, only at SportTech IQ✅ <a
+                href="https://t.co/sVJDuzGHI6">pic.twitter.com/sVJDuzGHI6</a></p>&mdash; SportTech IQ (@SportTechIQ) <a
+              href="https://twitter.com/SportTechIQ/status/1092177873459470336?ref_src=twsrc%5Etfw">February 3, 2019</a>
+          </blockquote>
+          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+        </div>
+      </div>
+
+    </section>
+
+
+    <span id="about-us" class="anchor"></span>
+    <section class="container mb-5">
+      <h2 class="display-4  py-3">About</h2>
+
+      <div class="row align-items-top justify-content-center">
+        <div class="col-lg pb-4 px-2 text-center">
+          <img src="/static/img/tc_mitchell.png" class="key-feature-image img-fluid" alt="Mitchell Moure">
+        </div>
+        <div class="col-lg pb-4 px-2 text-center">
+          <img src="/static/img/tc_brian.png" class="key-feature-image img-fluid" alt="Brian Moure">
+        </div>
+        <div class="col-lg pb-4 px-2 text-center">
+          <img src="/static/img/tc_christian.png" class="key-feature-image img-fluid" alt="Christian Silva">
+        </div>
+        <div class="col-lg pb-4 px-2 text-center">
+          <img src="/static/img/tc_alex.png" class="key-feature-image img-fluid" alt="Alexander Seufert">
+        </div>
+        <div class="col-lg pb-4 px-2 text-center">
+          <img src="/static/img/tc_valentin.png" class="key-feature-image img-fluid" alt="Valentin Kovshik">
+        </div>
+      </div>
+    </section>
 
 {% endblock %}

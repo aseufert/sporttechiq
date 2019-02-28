@@ -2,7 +2,6 @@ env
 .DS_Store
 *.pyc
 *.pyo
-static
 media
 .envrc
 site_config.json
