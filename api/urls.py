@@ -3,8 +3,6 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify
 
 from api import views
 
-# app_name = 'api'
-
 urlpatterns = [
     url(r'^players$', views.PlayerList.as_view()),
     url(r'^players/(?P<pk>[0-9]+)$', views.PlayerDetail.as_view()),

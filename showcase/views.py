@@ -90,7 +90,6 @@ def PlayerDetail(request, **kwargs):
     })
 
 
-# TODO: SET PERMISSION ON THIS TO ADMIN
 def GenerateTradingCard(request, **kwargs):
     pk = kwargs['pk']
     prev_link = request.META.get('HTTP_REFERER')

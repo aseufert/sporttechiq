@@ -37,7 +37,7 @@ def svgGenerator(player_data):
         Avg('total_dribbling'),
         Avg('total_control'),
         Avg('grand_total'),
-        )
+    )
 
     with open(file_read, 'r') as f:
         with open(file_write, 'w') as w:

@@ -2,7 +2,7 @@ import datetime
 
 genders = (('M', 'Male'), ('F', 'Female'))
 
-years = [(r,r) for r in range(1990, datetime.date.today().year+1)]
+years = [(r, r) for r in range(1990, datetime.date.today().year + 1)]
 
 user_types = (
     ('Unregistered', 'Unregistered'),

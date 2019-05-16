@@ -76,8 +76,6 @@ class PlayerScorecardList(generics.ListCreateAPIView):
     Player Scorecard Serializer class
     Get has read only, nested serializer
     Post has unnested serializer
-
-    TODO: Add more advanced filtering options. e.g. height__gt=65
     '''
     permission_classes = (IsAuthenticated, api_permissions.IsCoachDirectorOrReadOnly)
     filter_backends = (DjangoFilterBackend,)
@@ -142,16 +140,11 @@ class PlayerScorecardList(generics.ListCreateAPIView):
     )
 
     def get_serializer_class(self):
-         # Define your HTTP method-to-serializer mapping freely.
-         # This also works with CoreAPI and Swagger documentation,
-         # which produces clean and readable API documentation,
-         # so I have chosen to believe this is the way the
-         # Django REST Framework author intended things to work:
-         if self.request.method in ['POST']:
-             # Since the ReadSerializer does nested lookups
-             # in multiple tables, only use it when necessary
-             return serializers.PlayerScorecardCreateSerializer
-         return serializers.PlayerScorecardSerializer
+        if self.request.method in ['POST']:
+            # Since the ReadSerializer does nested lookups
+            # in multiple tables, only use it when necessary
+            return serializers.PlayerScorecardCreateSerializer
+        return serializers.PlayerScorecardSerializer
 
     def get_queryset(self):
         queryset = PlayerScorecard.objects.all().select_related('player').select_related('showcase')
@@ -183,22 +176,18 @@ class PlayerScorecardList(generics.ListCreateAPIView):
         else:
             raise Http404
 
+
 class PlayerScorecardDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated, api_permissions.IsCoachDirectorOrReadOnly)
     # serializer_class = serializers.PlayerScorecardSerializer
     queryset = PlayerScorecard.objects.all()
 
     def get_serializer_class(self):
-         # Define your HTTP method-to-serializer mapping freely.
-         # This also works with CoreAPI and Swagger documentation,
-         # which produces clean and readable API documentation,
-         # so I have chosen to believe this is the way the
-         # Django REST Framework author intended things to work:
-         if self.request.method in ['PUT', 'PATCH']:
-             # Since the ReadSerializer does nested lookups
-             # in multiple tables, only use it when necessary
-             return serializers.PlayerScorecardCreateSerializer
-         return serializers.PlayerScorecardSerializer
+        if self.request.method in ['PUT', 'PATCH']:
+            # Since the ReadSerializer does nested lookups
+            # in multiple tables, only use it when necessary
+            return serializers.PlayerScorecardCreateSerializer
+        return serializers.PlayerScorecardSerializer
 
 
 class TeamList(generics.ListCreateAPIView):
@@ -243,21 +232,18 @@ class ClubDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class CoachList(generics.ListCreateAPIView):
-    # TODO: If coach, coach == user. If Director, team.club.director == user
     permission_classes = (IsAuthenticated, api_permissions.IsCoachDirectorOrReadOnly)
     queryset = Coach.objects.all()
     serializer_class = serializers.CoachSerializer
 
 
 class CoachDetail(generics.RetrieveUpdateDestroyAPIView):
-    # TODO: Only allow if coach == user or director == team.club.director
     permission_classes = (IsAuthenticated, api_permissions.IsCoachDirectorOrReadOnly)
     queryset = Coach.objects.all()
     serializer_class = serializers.CoachSerializer
 
 
 class DirectorDetail(generics.RetrieveUpdateDestroyAPIView):
-    # TODO: Only allow if director == user
     permission_classes = (IsAuthenticated, api_permissions.IsDirectorOrAdmin)
     queryset = Director.objects.all()
     serializer_class = serializers.DirectorSerializer
@@ -282,6 +268,7 @@ class UserProfile(APIView):
     Retrieve, update or delete a user instance.
     """
     permission_classes = (api_permissions.IsUser,)
+
     def get_object(self, pk):
         try:
             return User.objects.get(id=pk)

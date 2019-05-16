@@ -12,7 +12,6 @@ EditorPlugin = namedtuple('BlockPlugin', (
 ))
 
 
-
 def _register_block_plugin(features, plugin):
     features.register_editor_plugin('draftail', plugin.feature_name, draftail_features.BlockFeature(plugin.control))
     features.register_converter_rule('contentstate', plugin.feature_name, {
@@ -25,7 +24,6 @@ def _register_block_plugin(features, plugin):
             },
         },
     })
-
 
 
 def _insert_feature_before(features, insert_feature, anchor_feature):
@@ -90,7 +88,6 @@ def register_left_feature(features):
         'type': type_,
         'label': 'Left',
         'description': 'p left',
-        # Optionally, we can tell Draftail what element to use when displaying those blocks in the editor.
         'element': 'p',
     }
 
@@ -127,7 +124,6 @@ def register_right_feature(features):
         'type': type_,
         'label': 'Right',
         'description': 'p right',
-        # Optionally, we can tell Draftail what element to use when displaying those blocks in the editor.
         'element': 'p',
         'style': {'textDecoration': 'line-through'},
     }

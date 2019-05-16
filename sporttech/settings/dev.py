@@ -1,6 +1,3 @@
-import os
-from .base import *
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -23,11 +20,3 @@ DATABASES = {
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'http://localhost:8000/'
-
-# INSTALLED_APPS += [
-#     'debug_toolbar'
-# ]
-
-# MIDDLEWARE += [
-#     'debug_toolbar.middleware.DebugToolbarMiddleware',
-# ]

@@ -1,8 +1,6 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.generic import TemplateView
-from django.conf import settings
-from django.urls import path, include
 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
@@ -26,16 +24,7 @@ urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     url(r'^search/$', search_views.search, name='search'),
-    # needs to go last or will interfere with other urls. can't change to ^$ or will break for some reason
     url(r'', include(wagtail_urls)),
 ]
 
 admin.site.site_header = 'SportTech IQ Admin Page'
-
-# uncomment when you've figured out the static files issue
-# if settings.DEBUG:
-#     import debug_toolbar
-
-#     urlpatterns += [
-#         path('__debug__/', include(debug_toolbar.urls)),
-#     ]

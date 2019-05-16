@@ -5,4 +5,4 @@ class ShowcaseConfig(AppConfig):
     name = 'showcase'
 
     def ready(self):
-    	import showcase.signals
+        import showcase.signals
