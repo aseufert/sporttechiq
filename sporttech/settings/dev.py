@@ -2,18 +2,18 @@
 DEBUG = True
 
 # SECURITY WARNING: define the correct hosts in production!
-ALLOWED_HOSTS = ['*'] 
+ALLOWED_HOSTS = ['*']
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "sporttech_db",
-        'USER': "postgres",
-        'PASSWORD': "seuf86",
+        'NAME': 'sporttech_db',
+        'USER': 'postgres',
+        'PASSWORD': '',
         'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'PORT': '',
     }
 }
 
